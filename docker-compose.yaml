@@ -1,0 +1,9 @@
+version: '3.8'
+services:
+  clientspa:
+    build:
+      dockerfile: dockerfile
+    ports:
+      - '5173:3000' 
+    stdin_open: true
+    tty: true
