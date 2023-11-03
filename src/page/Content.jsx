@@ -13,11 +13,10 @@ import {
     Box,
     Heading,
     Center} from '@chakra-ui/react'
-import Navbar from '../component/Navbar.jsx'
-import "../style/Page.css"
+import ButtonWhite from '../component/ButtonWhite.jsx'
 import ContentPhoto from '../component/ContentPhoto.jsx'
 import ContentVideo from '../component/ContentVideo.jsx'
-import ButtonWhite from '../component/ButtonWhite.jsx'
+import Navbar from '../component/Navbar.jsx'
 
 
 function Content() {
@@ -45,7 +44,7 @@ function Content() {
                 <Modal onClose={onClose} isOpen={isOpen} isCentered>
                     <ModalOverlay />
                     <ModalContent>
-                        <ModalHeader >Add Photo</ModalHeader>
+                        <ModalHeader >Add New Content</ModalHeader>
                         <ModalCloseButton />
                         <Image 
                             src="../../assets/home-page.png" 
@@ -82,7 +81,6 @@ function Content() {
             </Flex>
         </Box>
       </Flex>
-      
     </>
   )
 }
