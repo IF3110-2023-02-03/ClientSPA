@@ -7,17 +7,17 @@ import {
     IconButton,
     Image,
     Modal,
-    ModalContent,
-    ModalOverlay,
-    ModalHeader,
     ModalCloseButton,
-    useDisclosure,
+    ModalContent,
+    ModalHeader,
+    ModalOverlay,
     Popover,
-    PopoverTrigger,
-    PopoverContent,
     PopoverArrow,
+    PopoverContent,
+    PopoverTrigger,
     Text,
     Textarea,
+    useDisclosure,
 } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import Comment from './Comment.jsx';

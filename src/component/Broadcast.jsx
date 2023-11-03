@@ -3,6 +3,7 @@ import {
     Button,
     Card,
     CardBody,
+    CardFooter,
     Divider,
     Flex,
     IconButton,
@@ -19,7 +20,6 @@ import {
     PopoverArrow,
     Text,
     Textarea,
-    CardFooter,
 } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import Comment from './Comment.jsx';

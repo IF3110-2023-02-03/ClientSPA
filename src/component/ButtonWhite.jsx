@@ -1,4 +1,3 @@
-import { PhoneIcon } from '@chakra-ui/icons';
 import { Button } from '@chakra-ui/react';
 
 function ButtonWhite({ text, pv, ph, fontSize, handler }) {

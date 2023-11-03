@@ -1,18 +1,9 @@
 import {
-    Modal,
-    ModalContent,
-    ModalOverlay,
-    ModalHeader,
-    ModalCloseButton,
-    useDisclosure,
     Button,
     Input,
-    Image,
-    Textarea,
     Flex,
     Box,
     Heading,
-    ScaleFade,
     Center,
 } from '@chakra-ui/react';
 import Follower from '../component/Follower.jsx';
