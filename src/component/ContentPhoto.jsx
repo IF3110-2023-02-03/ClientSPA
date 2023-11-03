@@ -89,6 +89,11 @@ function ContentPhoto() {
                                     h={"20px"}
                                     w={"20px"}/>
                                 <Text>Likes</Text>
+                                <Image 
+                                    src="../../assets/date.png"
+                                    h={"20px"}
+                                    w={"20px"}/>
+                                <Text>99/99/9999</Text>
                             </Flex>
                         </Flex>
                         <Text 

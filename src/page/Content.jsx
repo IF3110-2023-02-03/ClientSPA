@@ -49,7 +49,7 @@ function Content() {
                         <ModalCloseButton />
                         <Image 
                             src="../../assets/home-page.png" 
-                            height={"30%"}
+                            maxHeight={"30%"}
                             maxWidth={"100%"}
                             objectFit={"contain"}
                             id="add-photo-display"/>

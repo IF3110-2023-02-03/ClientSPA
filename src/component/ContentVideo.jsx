@@ -7,17 +7,26 @@ import {
     Flex,
     IconButton,
     Image,
+    Modal,
+    ModalContent, 
+    ModalOverlay, 
+    ModalHeader, 
+    ModalCloseButton, 
+    useDisclosure, 
     Popover,
     PopoverTrigger,
     PopoverContent,
     PopoverArrow,
     Stack,
-    Text } from "@chakra-ui/react"
+    Text,
+    Textarea } from "@chakra-ui/react"
 import { 
     EditIcon } from '@chakra-ui/icons'
 import Comment from "./Comment.jsx"
 
 function ContentVideo() {
+    const { isOpen, onOpen, onClose } = useDisclosure()
+
     return (
       <>
         <Card 
@@ -52,7 +61,21 @@ function ContentVideo() {
                                 </PopoverTrigger>
                                 <PopoverContent w={"-moz-fit-content"}>
                                     <PopoverArrow />
-                                    <Button>Edit Description</Button>
+                                    <Button onClick={onOpen}>Edit Description</Button>
+                                    <Modal onClose={onClose} isOpen={isOpen} isCentered>
+                                        <ModalOverlay />
+                                        <ModalContent>
+                                            <ModalHeader >Edit Description</ModalHeader>
+                                            <ModalCloseButton />
+                                            <Textarea 
+                                                type="description" 
+                                                id="desc"
+                                                placeholder="Description" 
+                                                w={'90%'}
+                                                m={"5%"}/>
+                                            <Button id="submit-photo">Update</Button>
+                                        </ModalContent>
+                                    </Modal>
                                     <Button>Delete Content</Button>
                                 </PopoverContent>
                             </Popover>
@@ -71,6 +94,11 @@ function ContentVideo() {
                                     h={"20px"}
                                     w={"20px"}/>
                                 <Text>Likes</Text>
+                                <Image 
+                                    src="../../assets/date.png"
+                                    h={"20px"}
+                                    w={"20px"}/>
+                                <Text>99/99/9999</Text>
                             </Flex>
                         </Flex>
                         <Text 
