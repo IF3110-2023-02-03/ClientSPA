@@ -1,6 +1,6 @@
 import Navbar from '../component/Navbar.jsx'
 
-function Account() {
+function Broadcast() {
 
   return (
     <>
@@ -9,4 +9,4 @@ function Account() {
   )
 }
 
-export default Account
+export default Broadcast
