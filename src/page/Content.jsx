@@ -1,41 +1,87 @@
-import { Modal, ModalContent, ModalOverlay, ModalHeader, ModalCloseButton, useDisclosure, Button, Input, Image, Textarea } from '@chakra-ui/react'
+import { 
+    Modal,
+    ModalContent, 
+    ModalOverlay, 
+    ModalHeader, 
+    ModalCloseButton, 
+    useDisclosure, 
+    Button, 
+    Input, 
+    Image, 
+    Textarea, 
+    Flex,
+    Box,
+    Heading,
+    Center} from '@chakra-ui/react'
 import Navbar from '../component/Navbar.jsx'
 import "../style/Page.css"
-import { useState } from 'react'
+import ContentPhoto from '../component/ContentPhoto.jsx'
+import ContentVideo from '../component/ContentVideo.jsx'
+import ButtonWhite from '../component/ButtonWhite.jsx'
+
 
 function Content() {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <>
-      <div className='content-wrapper'>
+      <Flex
+        justify={"center"}
+        margin={"0 auto"}>
         <Navbar />
-        <div className="content">
-            <div className="item-settings-container">
-                <h1 className="title">Contents</h1>
-                <Button onClick={onOpen} className="button-white">Add Content</Button>
+        <Box 
+            w={"80%"}
+            h={"100%"}
+            mt={"8%"}
+            justify={"center"}
+            flexDirection={"column"}>
+            <Flex
+                flexDirection={"row"}
+                justify={"space-between"}
+                align={"center"}
+                mb={"3%"}>
+                <Heading>Contents</Heading>
+                <ButtonWhite text={"Add New Content"} handler={onOpen}/>
                 <Modal onClose={onClose} isOpen={isOpen} isCentered>
                     <ModalOverlay />
-                    <ModalContent className='add-photo-popup'>
+                    <ModalContent>
                         <ModalHeader >Add Photo</ModalHeader>
                         <ModalCloseButton />
-                        <Image src="../../assets/home-page.png" className="add-photo-img" id="add-photo-display"/>
-                        <div className="hcenter">
-                            <label htmlFor="file-input" className="input-label">Choose File</label>
-                        </div>
-                        <Input type="file" id="file-input"/>
-                        <div className="form-group">
-                            <Textarea type="description" id="desc" className="desc" placeholder="Description" w={'90%'}/>
-                        </div>
-                        <Button className="button-black" id="submit-photo">Upload Content</Button>
+                        <Image 
+                            src="../../assets/home-page.png" 
+                            height={"30%"}
+                            maxWidth={"100%"}
+                            objectFit={"contain"}
+                            id="add-photo-display"/>
+                        <Center
+                            mt={"4%"}>
+                            <label htmlFor="file-input">
+                                <ButtonWhite text={"Choose File"}/>
+                            </label>
+                        </Center>
+                        <Input 
+                            type="file"
+                            id="file-input"
+                            display={"none"}/>
+                        <Textarea 
+                            type="description" 
+                            id="desc"
+                            placeholder="Description" 
+                            w={'90%'}
+                            m={"5%"}/>
+                        <Button id="submit-photo">Upload Content</Button>
                     </ModalContent>
                 </Modal>
-            </div>
-            <br/>
-            <div className="content-container" id="container">
-            </div>
-        </div>
-      </div>
+            </Flex>
+            <Flex
+                justify={"center"}
+                align={"center"}
+                flexDirection={"column"}>
+                <ContentPhoto />
+                <ContentVideo />
+            </Flex>
+        </Box>
+      </Flex>
       
     </>
   )
