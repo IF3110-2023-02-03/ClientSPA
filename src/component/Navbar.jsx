@@ -1,47 +1,74 @@
 import { Link } from 'react-router-dom';
-import '../style/Navbar.css';
+// import '../style/Navbar.css';
+import {
+    Flex,
+    Text,
+} from '@chakra-ui/react';
 
 function Navbar() {
     return (
         <>
-            <div className='navbar-container'>
-                <div className='navbar'>
-                    <Link to='/content' className='navbar-item'>
-                        <img
-                            src='../../assets/image.png'
-                            alt='Content'
-                            className='navbar-item-img'
-                        />
-                        <p className='navbar-item-desc'>Content</p>
-                    </Link>
-                    <Link to='/broadcast' className='navbar-item'>
-                        <img
-                            src='../../assets/signal.png'
-                            alt='Broadcast'
-                            className='navbar-item-img'
-                        />
-                        <p className='navbar-item-desc'>Broadcast</p>
-                    </Link>
-                    <Link to='/followers' className='navbar-item'>
-                        <img
-                            src='../../assets/check.png'
-                            alt='Followers'
-                            className='navbar-item-img'
-                        />
-                        <p className='navbar-item-desc'>Followers</p>
-                    </Link>
-                    <Link to='/account' className='navbar-item'>
-                        <img
-                            src='../../assets/setting.png'
-                            alt='Account'
-                            className='navbar-item-img'
-                        />
-                        <p className='navbar-item-desc'>Account</p>
-                    </Link>
-                </div>
-            </div>
+            <Flex     
+                width= {'100%'}
+                mt= {'2%'}
+                position= {'absolute'}
+                justifyContent= {'center'}
+                zIndex={'1'}>
+                <Flex 
+                    height= {'68px'}
+                    p= {'0 3%'}
+                    backgroundColor={'white'}
+                    border={'3px solid black'}
+                    borderRadius={'50px'}
+                    flexDirection= {'row'}
+                    alignItems= {'center'}
+                    justifyContent= {'center'}
+                    gap= {'10%'}>
+                    <NavbarItem path='/content' srcimg='../../assets/image.png' alt='Content' desc='Content'/>
+                    <NavbarItem path='/broadcast' srcimg='../../assets/signal.png' alt='Broadcast' desc='Broadcast'/>
+                    <NavbarItem path='/followers' srcimg='../../assets/check.png' alt='Followers' desc='Followers'/>
+                    <NavbarItem path='/account' srcimg='../../assets/setting.png' alt='Account' desc='Account'/>
+                </Flex>
+            </Flex>
         </>
     );
+}
+
+function NavbarItem({path, srcimg, alt, desc}) {
+    return (
+        <Link 
+            to={path} 
+            style= {{
+                color: 'black', 
+                display: 'flex', 
+                flexDirection: 'row', 
+                alignItems: 'center', 
+                justifyContent: 'center', 
+                gap: '10px'}}>
+            <img
+                src={srcimg}
+                alt={alt}
+                className='navbar-item-img'
+                width= {'36px'}
+                height= {'36px'}
+                _hover= {{
+                    width: '40px',
+                    height: '40px',
+                    padding: '0',
+                    transition: '0.3s'}}
+            />
+            <Text 
+                textDecoration= {'none'}
+                fontSize= {'16px'}
+                _hover= {{
+                    textDecoration: 'underline',
+                    fontSize: '20px',
+                    fontWeight: 'bold',
+                    transition: '0.3s',}}>
+                    {desc}
+            </Text>
+        </Link>
+    )
 }
 
 export default Navbar;
