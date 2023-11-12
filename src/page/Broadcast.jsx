@@ -20,8 +20,6 @@ import React, { useState, useEffect } from 'react';
 function Broadcast() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [description, setDescription] = useState('');
-
-    const container = document.getElementById('container')
     
     const loadBroadcast = () => {
         try {
@@ -61,6 +59,7 @@ function Broadcast() {
 
     const processAddBroadcast = async () => {
         try {
+            console.log(description);
             const res = await addBroadcast(description);
             refresh()
             onClose();

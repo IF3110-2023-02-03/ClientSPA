@@ -43,6 +43,11 @@ function BroadcastItem({desc, date, id}) {
         }
     }
 
+    function NewlineText(props) {
+        const text = props.text;
+        return text.split('\n').map(str => <p key={crypto.randomUUID()}>{str}</p>);
+    }
+
     return (
         <>
             <Card flex shadow={'2xl'} w={'80%'} mb={'3%'}>
@@ -95,9 +100,7 @@ function BroadcastItem({desc, date, id}) {
                                     </PopoverContent>
                                 </Popover>
                             </Flex>
-                            <Text>
-                                {description}
-                            </Text>
+                            <NewlineText text={description} />
                             <Flex m={'10px 0 5px 0'} flexDirection={'row'}>
                                 <Flex
                                     flexDirection={'row'}
