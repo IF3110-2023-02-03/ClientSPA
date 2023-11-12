@@ -90,6 +90,7 @@ function BroadcastItem({desc, date, id}) {
                                                     w={'90%'}
                                                     m={'5%'}
                                                     onChange={(e) => setNewDescription(e.target.value)}
+                                                    defaultValue={description}
                                                 />
                                                 <Button onClick={processUpdateDescription}>
                                                     Update
