@@ -6,6 +6,7 @@ import {
     ModalCloseButton,
     useDisclosure,
     Button,
+    Text,
     Textarea,
     Flex,
     Box,
@@ -20,6 +21,7 @@ import React, { useState, useEffect } from 'react';
 function Broadcast() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [description, setDescription] = useState('');
+    const [instruction, setInstruction] = useState('');
     
     const loadBroadcast = () => {
         try {
@@ -59,11 +61,13 @@ function Broadcast() {
 
     const processAddBroadcast = async () => {
         try {
-            console.log(description);
-            const res = await addBroadcast(description);
-            refresh()
-            onClose();
-            console.log(res);
+            if (description == '') {
+                setInstruction('Type your broadcast first');
+            } else {
+                await addBroadcast(description);
+                refresh()
+                onClose();
+            }
         } catch (error) {
             console.log(error);
         }
@@ -106,9 +110,13 @@ function Broadcast() {
                                     id='desc'
                                     placeholder='Description'
                                     w={'90%'}
-                                    m={'5%'}
+                                    m={'5% 5% 0 5%'}
                                     onChange={(e) => setDescription(e.target.value)}
                                 />
+                                <Text 
+                                    color={'red'}
+                                    width={'90%'}
+                                    m={'0 0 5% 5%'}>{instruction}</Text>
                                 <Button onClick={processAddBroadcast}>Post Broadcast</Button>
                             </ModalContent>
                         </Modal>

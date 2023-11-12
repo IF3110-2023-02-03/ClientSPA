@@ -28,17 +28,20 @@ import { updateBroadcast, deleteBroadcast } from '../api/broadcast.js';
 
 function BroadcastItem({desc, date, id}) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const [newDescription, setNewDescription] = useState('')
-    const [description, setDescription] = useState(desc)
-    const [deleted, setDeleted] = useState(false)
+    const [newDescription, setNewDescription] = useState('');
+    const [description, setDescription] = useState(desc);
+    const [deleted, setDeleted] = useState(false);
+    const [instruction, setInstruction] = useState('');
 
     const processUpdateDescription = async () => {
         try {
-            const res = await updateBroadcast(newDescription, id);
-            console.log(res);
-            setDescription(newDescription);
-            onClose();
-            console.log(res);
+            if (newDescription == '') {
+                setInstruction('Updated broadcast cannot be empty')
+            } else {
+                const res = await updateBroadcast(newDescription, id);
+                setDescription(newDescription);
+                onClose();
+            }   
         } catch (error) {
             console.log(error);
         }
@@ -101,10 +104,14 @@ function BroadcastItem({desc, date, id}) {
                                                         id='desc'
                                                         placeholder='Description'
                                                         w={'90%'}
-                                                        m={'5%'}
+                                                        m={'5% 5% 0 5%'}
                                                         onChange={(e) => setNewDescription(e.target.value)}
                                                         defaultValue={description}
                                                     />
+                                                    <Text 
+                                                        color={'red'}
+                                                        width={'90%'}
+                                                        m={'0 0 5% 5%'}>{instruction}</Text>
                                                     <Button onClick={processUpdateDescription}>
                                                         Update
                                                     </Button>
