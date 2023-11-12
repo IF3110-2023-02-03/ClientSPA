@@ -23,9 +23,25 @@ import {
 } from '@chakra-ui/react';
 import { EditIcon } from '@chakra-ui/icons';
 import Comment from './Comment.jsx';
+import { useState } from 'react';
+import { updateBroadcast } from '../api/broadcast.js';
 
-function BroadcastItem({desc, date}) {
+function BroadcastItem({desc, date, id}) {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [newDescription, setNewDescription] = useState('')
+    const [description, setDescription] = useState(desc)
+
+    const processUpdateDescription = async () => {
+        try {
+            const res = await updateBroadcast(newDescription, id);
+            console.log(res);
+            setDescription(newDescription);
+            onClose();
+            console.log(res);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -68,8 +84,9 @@ function BroadcastItem({desc, date}) {
                                                     placeholder='Description'
                                                     w={'90%'}
                                                     m={'5%'}
+                                                    onChange={(e) => setNewDescription(e.target.value)}
                                                 />
-                                                <Button id='submit-photo'>
+                                                <Button onClick={processUpdateDescription}>
                                                     Update
                                                 </Button>
                                             </ModalContent>
@@ -79,7 +96,7 @@ function BroadcastItem({desc, date}) {
                                 </Popover>
                             </Flex>
                             <Text>
-                                {desc}
+                                {description}
                             </Text>
                             <Flex m={'10px 0 5px 0'} flexDirection={'row'}>
                                 <Flex

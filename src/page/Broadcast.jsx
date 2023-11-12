@@ -43,7 +43,7 @@ function Broadcast() {
                     <>
                         {data.data.data.map((item) => {
                             return  (
-                                <BroadcastItem key={item.objectID} desc={item.description} date={item.post_date}/>
+                                <BroadcastItem key={item.objectID} id={item.objectID} desc={item.description} date={item.post_date}/>
                             )}
                         )}
                     </>
