@@ -27,9 +27,32 @@ import WaitingFollower from '../component/WaitingFollower.jsx';
 import Navbar from '../component/Navbar.jsx';
 import ButtonWhite from '../component/ButtonWhite.jsx';
 import { Search2Icon } from '@chakra-ui/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { userInfo, updateUser } from '../api/account.js';
 
 function Account() {
+    function refreshUser() {
+        userInfo()
+            .then(response => {
+                const { data } = response.data;
+                setUser({
+                    username: data.user.username,
+                    fullname: data.user.fullname,
+                    description: data.user.description,
+                    profilePicture: data.user.pp_url,
+                    broadcastCount: data.broadcastCount,
+                    objectCount: data.objectCount,
+                });
+            })
+            .catch(error => {
+                console.error('Error fetching user info:', error);
+            });
+    }
+    
+    useEffect(() => {
+        refreshUser();
+    }, []); // Empty dependency array ensures the effect runs only once on mount
+
     const {
         isOpen: isOpen1,
         onOpen: onOpen1,
@@ -50,6 +73,80 @@ function Account() {
         onOpen: onOpen4,
         onClose: onClose4,
     } = useDisclosure();
+    const [user, setUser] = useState({
+        username: '',
+        fullname: '',
+        description: '',
+        profilePicture: '',
+        broadcastCount: 0,
+        objectCount: 0,
+    });
+
+    const [instruction, setInstruction] = useState('');
+
+    const [newDescription, setNewDescription] = useState('');
+    const handleEditDescription = async () => {
+        try {
+            if (newDescription == '') {
+                setInstruction('Updated description cannot be empty');
+            } else {
+                await updateUser(user.username, user.fullname, newDescription);
+                // Fetch updated user info after the change
+                await refreshUser();
+                onClose1(); // Close the modal after updating
+            }
+        } catch (error) {
+            console.error('Error updating description:', error);
+        }
+    };
+
+    const handleUploadProfilePicture = async (newProfilePicture) => {
+        try {
+            // Perform the logic for updating the profile picture here
+
+
+            await updateUser(user.username, user.fullname, user.description, newProfilePicture);
+            // Fetch updated user info after the change
+            const updatedUserInfo = await userInfo();
+            setUser(updatedUserInfo.data);
+            onClose2(); // Close the modal after updating
+        } catch (error) {
+            console.error('Error updating profile picture:', error);
+        }
+    };
+
+    const [newUsername, setNewUsername] = useState('');
+    const handleChangeUsername = async () => {
+        try {
+            if (newUsername == '') {
+                setInstruction('Updated username cannot be empty');
+            } else {
+                await updateUser(newUsername, user.fullname, user.description);
+                // Fetch updated user info after the change
+                await refreshUser();
+                onClose3(); // Close the modal after updating
+            }
+        } catch (error) {
+            console.error('Error updating username:', error);
+        }
+    };
+
+    const [newName, setNewName] = useState('');
+    const handleChangeName = async () => {
+        try {
+            if (newName == '') {
+                setInstruction('Updated name cannot be empty');
+            } else {
+                await updateUser(user.username, newName, user.description);
+                // Fetch updated user info after the change
+                await refreshUser();
+                onClose4(); // Close the modal after updating
+            }
+        } catch (error) {
+            console.error('Error updating name:', error);
+        }
+    };
+
     return (
         <>
             <Flex justify={'center'} margin={'0 auto'}>
@@ -85,7 +182,7 @@ function Account() {
                                 justifyContent={'space-around'}
                             >
                                 <Image
-                                    src='../../assets/ig.png'
+                                    src={user.profilePicture}
                                     width={'50vh'}
                                     height={'50vh'}
                                     objectFit={'cover'}
@@ -120,8 +217,19 @@ function Account() {
                                                             placeholder='Description'
                                                             w={'90%'}
                                                             m={'5%'}
+                                                            onChange={event =>
+                                                                setNewDescription(
+                                                                    event.target
+                                                                    .value
+                                                                    )
+                                                                }
                                                         />
-                                                        <Button id='submit-photo'>
+                                                        <Text
+                                                            color={'red'}
+                                                            width={'90%'}
+                                                            m={'0 0 5% 20%'}>{instruction}
+                                                        </Text>
+                                                        <Button id='submit-photo' onClick={handleEditDescription}>
                                                             Update
                                                         </Button>
                                                     </ModalContent>
@@ -189,8 +297,19 @@ function Account() {
                                                             placeholder='New Username'
                                                             w={'90%'}
                                                             m={'5%'}
+                                                            onChange={event =>
+                                                                setNewUsername(
+                                                                    event.target
+                                                                    .value
+                                                                    )
+                                                                }
                                                         />
-                                                        <Button id='submit-photo'>
+                                                        <Text
+                                                            color={'red'}
+                                                            width={'90%'}
+                                                            m={'0 0 5% 20%'}>{instruction}
+                                                        </Text>
+                                                        <Button id='submit-photo' onClick={handleChangeUsername}>
                                                             Update
                                                         </Button>
                                                     </ModalContent>
@@ -215,8 +334,19 @@ function Account() {
                                                             placeholder='New Name'
                                                             w={'90%'}
                                                             m={'5%'}
+                                                            onChange={event =>
+                                                                setNewName(
+                                                                    event.target
+                                                                    .value
+                                                                    )
+                                                                }
                                                         />
-                                                        <Button id='submit-photo'>
+                                                        <Text
+                                                            color={'red'}
+                                                            width={'90%'}
+                                                            m={'0 0 5% 20%'}>{instruction}
+                                                        </Text>
+                                                        <Button id='submit-photo' onClick={handleChangeName}>
                                                             Update
                                                         </Button>
                                                     </ModalContent>
@@ -232,27 +362,14 @@ function Account() {
                                         justify={'center'}
                                     >
                                         <Heading as={'h2'}>
-                                            Natthan Krish
+                                            {user.fullname}
                                         </Heading>
                                         <Text fontSize={'24px'}>
-                                            @natthankrish
+                                            @{user.username}
                                         </Text>
                                         <br></br>
                                         <Text textAlign={'center'}>
-                                            Lorem ipsum dolor sit amet,
-                                            consectetur adipiscing elit, sed do
-                                            eiusmod tempor incididunt ut labore
-                                            et dolore magna aliqua. Ut enim ad
-                                            minim veniam, quis nostrud
-                                            exercitation ullamco laboris nisi ut
-                                            aliquip ex ea commodo consequat.
-                                            Duis aute irure dolor in
-                                            reprehenderit in voluptate velit
-                                            esse cillum dolore eu fugiat nulla
-                                            pariatur. Excepteur sint occaecat
-                                            cupid atat non proident, sunt in
-                                            culpa qui officia deserunt mollit
-                                            anim id est laborum
+                                            {user.description}
                                         </Text>
                                         <br></br>
                                         <Flex
@@ -276,14 +393,14 @@ function Account() {
                                                     w={'20px'}
                                                 />
                                                 <Text>
-                                                    12 Exclusive Content
+                                                    {user.objectCount} Exclusive Content
                                                 </Text>
                                                 <Image
                                                     src='../../assets/signal.png'
                                                     h={'20px'}
                                                     w={'20px'}
                                                 />
-                                                <Text>12 Broadcast</Text>
+                                                <Text>{user.broadcastCount} Broadcast</Text>
                                             </Flex>
                                         </Flex>
                                     </Flex>
