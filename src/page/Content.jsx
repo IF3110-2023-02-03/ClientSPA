@@ -21,6 +21,17 @@ import Navbar from '../component/Navbar.jsx';
 
 function Content() {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const container = document.getElementById('container')
+    
+    const getContent = async () => {
+        try {
+            const res = await getContent(username, password);
+            localStorage.setItem('token', res.token);
+            localStorage.setItem('userID', res.userID);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -83,6 +94,7 @@ function Content() {
                         justify={'center'}
                         align={'center'}
                         flexDirection={'column'}
+                        id={'container'}
                     >
                         <ContentPhoto />
                         <ContentVideo />

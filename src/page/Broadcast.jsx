@@ -14,9 +14,61 @@ import {
 import BroadcastItem from '../component/Broadcast.jsx';
 import Navbar from '../component/Navbar.jsx';
 import ButtonWhite from '../component/ButtonWhite.jsx';
+import { getBroadcast, addBroadcast } from '../api/broadcast.js';
+import React, { useState, useEffect } from 'react';
 
 function Broadcast() {
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [description, setDescription] = useState('');
+
+    const container = document.getElementById('container')
+    
+    const loadBroadcast = () => {
+        try {
+            const [data, setData] = useState([]);
+            useEffect(() => {
+                const getData = async () => {
+                  try {
+                    const res = await getBroadcast()
+                    setData(res);
+                  } catch (err) {
+                    console.error(err);
+                  }
+                }
+              
+                getData();
+              }, []);
+            if (data.length != 0) {
+                return (
+                    <>
+                        {data.data.data.map((item) => {
+                            return  (
+                                <BroadcastItem key={item.objectID} desc={item.description} date={item.post_date}/>
+                            )}
+                        )}
+                    </>
+                );
+            } 
+        } catch (error) {
+            console.log(error);
+            return (<></>)
+        }
+    }
+
+    const refresh = () => {
+        window.location.reload(false);
+    }
+
+    const processAddBroadcast = async () => {
+        try {
+            const res = await addBroadcast(description);
+            refresh()
+            onClose();
+            console.log(res);
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <>
@@ -56,8 +108,9 @@ function Broadcast() {
                                     placeholder='Description'
                                     w={'90%'}
                                     m={'5%'}
+                                    onChange={(e) => setDescription(e.target.value)}
                                 />
-                                <Button id='submit-photo'>Broadcast</Button>
+                                <Button onClick={processAddBroadcast}>Post Broadcast</Button>
                             </ModalContent>
                         </Modal>
                     </Flex>
@@ -65,9 +118,9 @@ function Broadcast() {
                         justify={'center'}
                         align={'center'}
                         flexDirection={'column'}
+                        id={'container'}
                     >
-                        <BroadcastItem />
-                        <BroadcastItem />
+                        {loadBroadcast()}
                     </Flex>
                 </Box>
             </Flex>

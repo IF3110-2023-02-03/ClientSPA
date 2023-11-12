@@ -24,7 +24,7 @@ import {
 import { EditIcon } from '@chakra-ui/icons';
 import Comment from './Comment.jsx';
 
-function BroadcastItem() {
+function BroadcastItem({desc, date}) {
     const { isOpen, onOpen, onClose } = useDisclosure();
 
     return (
@@ -37,7 +37,7 @@ function BroadcastItem() {
                         justifyContent={'space-around'}
                     >
                         <Box width={'95%'}>
-                            <Flex justifyContent={'right'} mb={'20px'}>
+                            <Flex justifyContent={'right'} >
                                 <Popover>
                                     <PopoverTrigger>
                                         <IconButton
@@ -79,16 +79,7 @@ function BroadcastItem() {
                                 </Popover>
                             </Flex>
                             <Text>
-                                Lorem ipsum dolor sit amet, consectetur
-                                adipiscing elit, sed do eiusmod tempor
-                                incididunt ut labore et dolore magna aliqua. Ut
-                                enim ad minim veniam, quis nostrud exercitation
-                                ullamco laboris nisi ut aliquip ex ea commodo
-                                consequat. Duis aute irure dolor in
-                                reprehenderit in voluptate velit esse cillum
-                                dolore eu fugiat nulla pariatur. Excepteur sint
-                                occaecat cupid atat non proident, sunt in culpa
-                                qui officia deserunt mollit anim id est laborum
+                                {desc}
                             </Text>
                             <Flex m={'10px 0 5px 0'} flexDirection={'row'}>
                                 <Flex
@@ -107,7 +98,7 @@ function BroadcastItem() {
                                         h={'20px'}
                                         w={'20px'}
                                     />
-                                    <Text>99/99/9999</Text>
+                                    <Text>{date}</Text>
                                 </Flex>
                             </Flex>
                             <Divider mt={'20px'} />

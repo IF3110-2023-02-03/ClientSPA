@@ -24,8 +24,9 @@ function Login() {
     const processLogin = async () => {
         try {
             const res = await login(username, password);
-            localStorage.setItem('token', res.token);
-            localStorage.setItem('userID', res.userID);
+            localStorage.setItem('token', res.data.token);
+            localStorage.setItem('userID', res.data.userID);
+            console.log(res);
             navigate('/content')
         } catch (error) {
             console.log(error);
