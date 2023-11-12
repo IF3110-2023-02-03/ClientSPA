@@ -1,12 +1,11 @@
-FROM node:21-alpine
-
-WORKDIR /clientspa
+FROM node:latest
+WORKDIR /app
 
 COPY package.json .
-
-RUN npm install
+RUN yarn
 
 COPY . .
 
-EXPOSE 3000
+CMD ["yarn", "dev", "--host"]
 
+EXPOSE 5173
