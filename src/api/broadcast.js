@@ -17,3 +17,5 @@ export const updateBroadcast = (broadcast, id) => axios.put('http://localhost:30
     'description': broadcast,
     'objectID': id
 })
+
+export const deleteBroadcast = (id) => axios.delete('http://localhost:3000/api/broadcast/' + id)
