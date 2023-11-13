@@ -12,10 +12,9 @@ export const addBroadcast = (broadcast) => axios.post('http://localhost:3000/api
     'description': broadcast
 })
 
-export const updateBroadcast = (broadcast, id) => axios.put('http://localhost:3000/api/broadcast', {
+export const updateBroadcast = (broadcast, id) => axios.put('http://localhost:3000/api/broadcast/' + id, {
     'userID': localStorage.getItem('userID'),
     'description': broadcast,
-    'objectID': id
 })
 
 export const deleteBroadcast = (id) => axios.delete('http://localhost:3000/api/broadcast/' + id)
