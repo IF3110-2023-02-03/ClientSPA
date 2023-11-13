@@ -63,6 +63,8 @@ function Broadcast() {
         try {
             if (description == '') {
                 setInstruction('Type your broadcast first');
+            } else if (description.length > 1000) {
+                setInstruction('Broadcast cannot be more than 1000 characters');
             } else {
                 await addBroadcast(description);
                 refresh()
@@ -71,6 +73,11 @@ function Broadcast() {
         } catch (error) {
             console.log(error);
         }
+    }
+
+    const openModal = () => {
+        onOpen();
+        setInstruction('');
     }
 
     return (
@@ -93,7 +100,7 @@ function Broadcast() {
                         <Heading>Broadcasts</Heading>
                         <ButtonWhite
                             text={'Add New Broadcast'}
-                            handler={onOpen}
+                            handler={openModal}
                         />
                         <Modal
                             onClose={onClose}

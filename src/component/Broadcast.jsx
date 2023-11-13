@@ -37,6 +37,8 @@ function BroadcastItem({desc, date, id}) {
         try {
             if (newDescription == '') {
                 setInstruction('Updated broadcast cannot be empty')
+            } else if (description.length > 1000) {
+                setInstruction('Broadcast cannot be more than 1000 characters');
             } else {
                 const res = await updateBroadcast(newDescription, id);
                 setDescription(newDescription);
@@ -59,6 +61,11 @@ function BroadcastItem({desc, date, id}) {
     function NewlineText(props) {
         const text = props.text;
         return text.split('\n').map(str => <p key={crypto.randomUUID()}>{str}</p>);
+    }
+
+    const openModal = () => {
+        onOpen();
+        setInstruction('');
     }
 
     if (deleted) {
@@ -85,7 +92,7 @@ function BroadcastItem({desc, date, id}) {
                                         </PopoverTrigger>
                                         <PopoverContent w={'-moz-fit-content'}>
                                             <PopoverArrow />
-                                            <Button onClick={onOpen}>
+                                            <Button onClick={openModal}>
                                                 Edit Description
                                             </Button>
                                             <Modal
