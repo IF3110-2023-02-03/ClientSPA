@@ -147,6 +147,15 @@ function Account() {
         }
     };
 
+    const handleLogout = async () => {
+        try {
+            localStorage.clear();
+            window.location.href = '/';
+        } catch (error) {
+            console.error('Error logging out:', error);
+        }
+    }
+
     return (
         <>
             <Flex justify={'center'} margin={'0 auto'}>
@@ -170,7 +179,7 @@ function Account() {
                             gap={'20px'}
                             alignItems={'center'}
                         >
-                            <Button p={'0 40px'} id='see-request-btn'>
+                            <Button p={'0 40px'} id='see-request-btn' onClick={handleLogout}>
                                 Logout
                             </Button>
                         </Flex>
