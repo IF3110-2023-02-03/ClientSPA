@@ -17,47 +17,63 @@ import Navbar from '../component/Navbar.jsx';
 import ButtonWhite from '../component/ButtonWhite.jsx';
 import { getBroadcast, addBroadcast } from '../api/broadcast.js';
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Broadcast() {
+    const navigate = useNavigate();
+
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [description, setDescription] = useState('');
     const [instruction, setInstruction] = useState('');
-    
+
+    useEffect(() => {
+        // Check if userID is not set in localStorage, then redirect to home page
+        const userID = localStorage.getItem('userID');
+        if (!userID) {
+            navigate('/');
+        }
+    }, [navigate]);
+
     const loadBroadcast = () => {
         try {
             const [data, setData] = useState([]);
             useEffect(() => {
                 const getData = async () => {
-                  try {
-                    const res = await getBroadcast()
-                    setData(res);
-                  } catch (err) {
-                    console.error(err);
-                  }
-                }
-              
+                    try {
+                        const res = await getBroadcast();
+                        setData(res);
+                    } catch (err) {
+                        console.error(err);
+                    }
+                };
+
                 getData();
-              }, []);
+            }, []);
             if (data.length != 0) {
                 return (
                     <>
                         {data.data.data.map((item) => {
-                            return  (
-                                <BroadcastItem key={item.objectID} id={item.objectID} desc={item.description} date={item.post_date}/>
-                            )}
-                        )}
+                            return (
+                                <BroadcastItem
+                                    key={item.objectID}
+                                    id={item.objectID}
+                                    desc={item.description}
+                                    date={item.post_date}
+                                />
+                            );
+                        })}
                     </>
                 );
-            } 
+            }
         } catch (error) {
             console.log(error);
-            return (<></>)
+            return <></>;
         }
-    }
+    };
 
     const refresh = () => {
         window.location.reload(false);
-    }
+    };
 
     const processAddBroadcast = async () => {
         try {
@@ -67,18 +83,18 @@ function Broadcast() {
                 setInstruction('Broadcast cannot be more than 1000 characters');
             } else {
                 await addBroadcast(description);
-                refresh()
+                refresh();
                 onClose();
             }
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     const openModal = () => {
         onOpen();
         setInstruction('');
-    }
+    };
 
     return (
         <>
@@ -118,13 +134,20 @@ function Broadcast() {
                                     placeholder='Description'
                                     w={'90%'}
                                     m={'5% 5% 0 5%'}
-                                    onChange={(e) => setDescription(e.target.value)}
+                                    onChange={(e) =>
+                                        setDescription(e.target.value)
+                                    }
                                 />
-                                <Text 
+                                <Text
                                     color={'red'}
                                     width={'90%'}
-                                    m={'0 0 5% 5%'}>{instruction}</Text>
-                                <Button onClick={processAddBroadcast}>Post Broadcast</Button>
+                                    m={'0 0 5% 5%'}
+                                >
+                                    {instruction}
+                                </Text>
+                                <Button onClick={processAddBroadcast}>
+                                    Post Broadcast
+                                </Button>
                             </ModalContent>
                         </Modal>
                     </Flex>

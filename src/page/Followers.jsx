@@ -1,19 +1,23 @@
-import {
-    Button,
-    Input,
-    Flex,
-    Box,
-    Heading,
-    Center,
-} from '@chakra-ui/react';
+import { Button, Input, Flex, Box, Heading, Center } from '@chakra-ui/react';
 import Follower from '../component/Follower.jsx';
 import WaitingFollower from '../component/WaitingFollower.jsx';
 import Navbar from '../component/Navbar.jsx';
 import { Search2Icon } from '@chakra-ui/icons';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function Followers() {
+    const navigate = useNavigate();
+
     const [isRequestPage, setRequestPage] = useState(false);
+
+    useEffect(() => {
+        // Check if userID is not set in localStorage, then redirect to home page
+        const userID = localStorage.getItem('userID');
+        if (!userID) {
+            navigate('/');
+        }
+    }, [navigate]);
 
     function changeRequest() {
         if (isRequestPage) {

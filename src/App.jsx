@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import {
+    BrowserRouter as Router,
+    Routes,
+    Route,
+    Navigate,
+} from 'react-router-dom';
 import Home from './page/Home.jsx';
 import Login from './page/Login.jsx';
 import Register from './page/Register.jsx';
@@ -18,6 +23,8 @@ function App() {
                 <Route path='/broadcast' element={<Broadcast />} />
                 <Route path='/followers' element={<Followers />} />
                 <Route path='/account' element={<Account />} />
+                {/* Catch-all route for unmatched URLs */}
+                <Route path='*' element={<Navigate to='/' replace />} />
             </Routes>
         </Router>
     );

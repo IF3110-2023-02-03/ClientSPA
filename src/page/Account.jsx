@@ -21,19 +21,18 @@ import {
     Textarea,
     useDisclosure,
 } from '@chakra-ui/react';
-import { EditIcon } from '@chakra-ui/icons';
-import Follower from '../component/Follower.jsx';
-import WaitingFollower from '../component/WaitingFollower.jsx';
 import Navbar from '../component/Navbar.jsx';
 import ButtonWhite from '../component/ButtonWhite.jsx';
-import { Search2Icon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
 import { userInfo, updateUser } from '../api/account.js';
+import { useNavigate } from 'react-router-dom';
 
 function Account() {
+    const navigate = useNavigate();
+
     function refreshUser() {
         userInfo()
-            .then(response => {
+            .then((response) => {
                 const { data } = response.data;
                 setUser({
                     username: data.user.username,
@@ -44,14 +43,20 @@ function Account() {
                     objectCount: data.objectCount,
                 });
             })
-            .catch(error => {
+            .catch((error) => {
                 console.error('Error fetching user info:', error);
             });
     }
-    
+
     useEffect(() => {
-        refreshUser();
-    }, []); // Empty dependency array ensures the effect runs only once on mount
+        // Check if userID is not set in localStorage
+        const userID = localStorage.getItem('userID');
+        if (!userID) {
+          navigate('/');    // Redirect to home page
+        } else {
+          refreshUser();    // Fetch user info
+        }
+      }, [navigate]);
 
     const {
         isOpen: isOpen1,
@@ -104,8 +109,12 @@ function Account() {
         try {
             // Perform the logic for updating the profile picture here
 
-
-            await updateUser(user.username, user.fullname, user.description, newProfilePicture);
+            await updateUser(
+                user.username,
+                user.fullname,
+                user.description,
+                newProfilePicture,
+            );
             // Fetch updated user info after the change
             const updatedUserInfo = await userInfo();
             setUser(updatedUserInfo.data);
@@ -154,7 +163,7 @@ function Account() {
         } catch (error) {
             console.error('Error logging out:', error);
         }
-    }
+    };
 
     return (
         <>
@@ -179,7 +188,11 @@ function Account() {
                             gap={'20px'}
                             alignItems={'center'}
                         >
-                            <Button p={'0 40px'} id='see-request-btn' onClick={handleLogout}>
+                            <Button
+                                p={'0 40px'}
+                                id='see-request-btn'
+                                onClick={handleLogout}
+                            >
                                 Logout
                             </Button>
                         </Flex>
@@ -226,19 +239,26 @@ function Account() {
                                                             placeholder='Description'
                                                             w={'90%'}
                                                             m={'5%'}
-                                                            onChange={event =>
+                                                            onChange={(event) =>
                                                                 setNewDescription(
                                                                     event.target
-                                                                    .value
-                                                                    )
-                                                                }
+                                                                        .value,
+                                                                )
+                                                            }
                                                         />
                                                         <Text
                                                             color={'red'}
                                                             width={'90%'}
-                                                            m={'0 0 5% 20%'}>{instruction}
+                                                            m={'0 0 5% 20%'}
+                                                        >
+                                                            {instruction}
                                                         </Text>
-                                                        <Button id='submit-photo' onClick={handleEditDescription}>
+                                                        <Button
+                                                            id='submit-photo'
+                                                            onClick={
+                                                                handleEditDescription
+                                                            }
+                                                        >
                                                             Update
                                                         </Button>
                                                     </ModalContent>
@@ -306,19 +326,26 @@ function Account() {
                                                             placeholder='New Username'
                                                             w={'90%'}
                                                             m={'5%'}
-                                                            onChange={event =>
+                                                            onChange={(event) =>
                                                                 setNewUsername(
                                                                     event.target
-                                                                    .value
-                                                                    )
-                                                                }
+                                                                        .value,
+                                                                )
+                                                            }
                                                         />
                                                         <Text
                                                             color={'red'}
                                                             width={'90%'}
-                                                            m={'0 0 5% 20%'}>{instruction}
+                                                            m={'0 0 5% 20%'}
+                                                        >
+                                                            {instruction}
                                                         </Text>
-                                                        <Button id='submit-photo' onClick={handleChangeUsername}>
+                                                        <Button
+                                                            id='submit-photo'
+                                                            onClick={
+                                                                handleChangeUsername
+                                                            }
+                                                        >
                                                             Update
                                                         </Button>
                                                     </ModalContent>
@@ -343,19 +370,26 @@ function Account() {
                                                             placeholder='New Name'
                                                             w={'90%'}
                                                             m={'5%'}
-                                                            onChange={event =>
+                                                            onChange={(event) =>
                                                                 setNewName(
                                                                     event.target
-                                                                    .value
-                                                                    )
-                                                                }
+                                                                        .value,
+                                                                )
+                                                            }
                                                         />
                                                         <Text
                                                             color={'red'}
                                                             width={'90%'}
-                                                            m={'0 0 5% 20%'}>{instruction}
+                                                            m={'0 0 5% 20%'}
+                                                        >
+                                                            {instruction}
                                                         </Text>
-                                                        <Button id='submit-photo' onClick={handleChangeName}>
+                                                        <Button
+                                                            id='submit-photo'
+                                                            onClick={
+                                                                handleChangeName
+                                                            }
+                                                        >
                                                             Update
                                                         </Button>
                                                     </ModalContent>
@@ -402,14 +436,18 @@ function Account() {
                                                     w={'20px'}
                                                 />
                                                 <Text>
-                                                    {user.objectCount} Exclusive Content
+                                                    {user.objectCount} Exclusive
+                                                    Content
                                                 </Text>
                                                 <Image
                                                     src='../../assets/signal.png'
                                                     h={'20px'}
                                                     w={'20px'}
                                                 />
-                                                <Text>{user.broadcastCount} Broadcast</Text>
+                                                <Text>
+                                                    {user.broadcastCount}{' '}
+                                                    Broadcast
+                                                </Text>
                                             </Flex>
                                         </Flex>
                                     </Flex>

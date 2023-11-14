@@ -18,11 +18,22 @@ import ButtonWhite from '../component/ButtonWhite.jsx';
 import ContentPhoto from '../component/ContentPhoto.jsx';
 import ContentVideo from '../component/ContentVideo.jsx';
 import Navbar from '../component/Navbar.jsx';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 function Content() {
+    const navigate = useNavigate();
+
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const container = document.getElementById('container')
-    
+
+    useEffect(() => {
+        // Check if userID is not set in localStorage, then redirect to home page
+        const userID = localStorage.getItem('userID');
+        if (!userID) {
+            navigate('/');
+        }
+    }, [navigate]);
+
     const getContent = async () => {
         try {
             const res = await getContent(username, password);
@@ -31,7 +42,7 @@ function Content() {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     return (
         <>
