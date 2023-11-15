@@ -7,9 +7,9 @@ export const getContent = () => axios.get('http://localhost:3000/api/content', {
     }
 })
 
-export const addContent = (username, fullname, email, password) => axios.get('http://localhost:3000/api/user', {
-    headers: {Authorization: 'Bearer ' + localStorage.getItem('token')},
-    params: {
-        userID
+export const addContent = (formData) => axios.post('http://localhost:3000/api/content', formData, {
+    headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        "Content-Type": "multipart/form-data"
     }
 })

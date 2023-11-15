@@ -18,12 +18,13 @@ import {
     FormLabel,
     useSafeLayoutEffect,
 } from '@chakra-ui/react';
+import BroadcastItem from '../component/Broadcast.jsx';
 import ButtonWhite from '../component/ButtonWhite.jsx';
 import { getContent, addContent } from '../api/content.js';
 import ContentPhoto from '../component/ContentPhoto.jsx';
 import ContentVideo from '../component/ContentVideo.jsx';
 import Navbar from '../component/Navbar.jsx';
-import { useNavigate } from 'react-router-dom';
+import { Form, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 function Content() {
@@ -65,12 +66,18 @@ function Content() {
 
     const processAddContent = async () => {
         try {
-            if (description == '') {
-                setInstruction('Type your broadcast first');
+            if (!selectedFile) {
+                setInstruction('No File Chosen');
+            } else if (description == '') {
+                setInstruction('Fill file description first');
             } else if (description.length > 1000) {
-                setInstruction('Broadcast cannot be more than 1000 characters');
+                setInstruction('Description cannot be more than 1000 characters');
             } else {
-                await addContent(description);
+                const formData = new FormData();
+                formData.append("userID", localStorage.getItem('userID'));
+                formData.append("file", selectedFile);
+                formData.append("description", description);
+                await addContent(formData);
                 loadData();
                 onClose();
             }
@@ -90,6 +97,7 @@ function Content() {
                 id='add-photo-display'
             /> 
       )} else {
+        console.log(selectedFile);
         const reader = new FileReader();
         reader.onload = () => setPreviewFile(reader.result);
         reader.readAsDataURL(selectedFile);
@@ -173,14 +181,14 @@ function Content() {
                                         setDescription(e.target.value)
                                     }
                                 />
-                                <Text
+                                <Center
                                     color={'red'}
                                     width={'90%'}
                                     m={'0 0 5% 5%'}
                                 >
                                     {instruction}
-                                </Text>
-                                <Button id='submit-photo'>
+                                </Center>
+                                <Button onClick={processAddContent}>
                                     Upload Content
                                 </Button>
                             </ModalContent>
