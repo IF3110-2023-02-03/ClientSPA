@@ -47,9 +47,9 @@ function ContentPhoto({ desc, date, id, path }) {
     const processUpdateDescription = async () => {
         try {
             if (newDescription == '') {
-                setInstruction('Updated broadcast cannot be empty')
+                setInstruction('Updated description cannot be empty')
             } else if (newDescription.length > 1000) {
-                setInstruction('Broadcast cannot be more than 1000 characters');
+                setInstruction('Description cannot be more than 1000 characters');
             } else {
                 const res = await updateContent(newDescription, id);
                 setDescription(newDescription);
