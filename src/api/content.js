@@ -1,17 +1,15 @@
 import axios from 'axios';
 
-export const getContent = (username, fullname, email, password) => axios.get('http://localhost:3000/api/user', {
+export const getContent = () => axios.get('http://localhost:3000/api/content', {
     headers: {Authorization: 'Bearer ' + localStorage.getItem('token')},
     params: {
-        userID
+        'userID': localStorage.getItem('userID')
     }
 })
 
-export const addContent = (username, fullname, email, password) => axios.get('http://localhost:3000/api/user', {
-    headers: {Authorization: 'Bearer ' + localStorage.getItem('token')},
-    params: {
-        userID
+export const addContent = (formData) => axios.post('http://localhost:3000/api/content', formData, {
+    headers: {
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+        "Content-Type": "multipart/form-data"
     }
 })
-
-export default register;
