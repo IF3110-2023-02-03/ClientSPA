@@ -5,13 +5,14 @@ import Navbar from '../component/Navbar.jsx';
 import { Search2Icon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { getPendingFollowers } from '../api/following.js';
+import { getFollowers, getPendingFollowers } from '../api/following.js';
 
 function Followers() {
     const navigate = useNavigate();
 
     const [isRequestPage, setRequestPage] = useState(false);
     const [requests, setRequests] = useState([])
+    const [followers, setFollowers] = useState([])
 
     useEffect(() => {
         // Check if userID is not set in localStorage, then redirect to home page
@@ -24,6 +25,11 @@ function Followers() {
     useEffect(() => {
         if(isRequestPage){
             getPendingFollowers(localStorage.getItem("userID")).then(res => setRequests(res.data.data)).catch(err => console.log(err))
+        }else{
+            getFollowers(localStorage.getItem("userID")).then(res => {
+                console.log(res)
+                setFollowers(res.data.data)
+            }).catch(err => console.log(err))
         }
     }, [isRequestPage])
 
@@ -92,7 +98,7 @@ function Followers() {
                             >
                                 {
                                     requests.map(req => 
-                                        <WaitingFollower key={req.follwerID} username={req.followerUsername} fullname={req.followerName} id={req.followerID}/>)
+                                        <WaitingFollower key={req.followerID} username={req.followerUsername} fullname={req.followerName} id={req.followerID}/>)
                                 }
                             </Flex>
                         </Flex>
@@ -104,8 +110,9 @@ function Followers() {
                             flexWrap={'wrap'}
                             gap={'5%'}
                         >
-                            <Follower />
-                            <Follower />
+                            {
+                                followers.map(fol => <Follower key={fol.followerID} username={fol.followerUsername} fullname={fol.followerName} id={fol.followerID}/>)
+                            }
                         </Flex>
                     )}
                 </Box>

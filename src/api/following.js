@@ -11,7 +11,7 @@ const confirmFollow = (creatorID, followerID, isApproved) => {
 const getFollowers = (creatorID) => axios.get('http://localhost:3000/api/follow', {
     headers: { Authorization: 'Bearer ' + localStorage.getItem('token') },
     params: {
-        creatorID
+        id: creatorID
     }
 })
 
