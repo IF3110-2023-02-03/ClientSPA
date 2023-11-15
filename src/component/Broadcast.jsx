@@ -37,7 +37,7 @@ function BroadcastItem({desc, date, id}) {
         try {
             if (newDescription == '') {
                 setInstruction('Updated broadcast cannot be empty')
-            } else if (description.length > 1000) {
+            } else if (newDescription.length > 1000) {
                 setInstruction('Broadcast cannot be more than 1000 characters');
             } else {
                 const res = await updateBroadcast(newDescription, id);
