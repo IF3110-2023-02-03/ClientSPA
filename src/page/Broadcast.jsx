@@ -25,6 +25,7 @@ function Broadcast() {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const [description, setDescription] = useState('');
     const [instruction, setInstruction] = useState('');
+    const [data, setData] = useState([]);
 
     useEffect(() => {
         // Check if userID is not set in localStorage, then redirect to home page
@@ -32,47 +33,16 @@ function Broadcast() {
         if (!userID) {
             navigate('/');
         }
+        loadData();
     }, [navigate]);
 
-    const loadBroadcast = () => {
+    const loadData = async () => {
         try {
-            const [data, setData] = useState([]);
-            useEffect(() => {
-                const getData = async () => {
-                    try {
-                        const res = await getBroadcast();
-                        setData(res);
-                    } catch (err) {
-                        console.error(err);
-                    }
-                };
-
-                getData();
-            }, []);
-            if (data.length != 0) {
-                return (
-                    <>
-                        {data.data.data.map((item) => {
-                            return (
-                                <BroadcastItem
-                                    key={item.objectID}
-                                    id={item.objectID}
-                                    desc={item.description}
-                                    date={item.post_date}
-                                />
-                            );
-                        })}
-                    </>
-                );
-            }
+            const res = await getBroadcast();
+            setData(res);
         } catch (error) {
             console.log(error);
-            return <></>;
         }
-    };
-
-    const refresh = () => {
-        window.location.reload(false);
     };
 
     const processAddBroadcast = async () => {
@@ -83,7 +53,7 @@ function Broadcast() {
                 setInstruction('Broadcast cannot be more than 1000 characters');
             } else {
                 await addBroadcast(description);
-                refresh();
+                loadData();
                 onClose();
             }
         } catch (error) {
@@ -94,6 +64,7 @@ function Broadcast() {
     const openModal = () => {
         onOpen();
         setInstruction('');
+        setDescription('');
     };
 
     return (
@@ -157,7 +128,20 @@ function Broadcast() {
                         flexDirection={'column'}
                         id={'container'}
                     >
-                        {loadBroadcast()}
+                        {data.length == 0 
+                            ? <></> 
+                            : <>
+                                {data.data.data.map((item) => {
+                                    return (
+                                        <BroadcastItem
+                                            key={item.objectID}
+                                            id={item.objectID}
+                                            desc={item.description}
+                                            date={item.post_date}
+                                        />
+                                    );
+                                })}
+                            </>}
                     </Flex>
                 </Box>
             </Flex>
