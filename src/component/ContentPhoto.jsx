@@ -22,7 +22,7 @@ import {
 import { EditIcon } from '@chakra-ui/icons';
 import Comment from './Comment.jsx';
 import { useEffect, useState } from 'react';
-import { updateContent, deleteContent, getSource } from '../api/content.js';
+import { updateContent, deleteContent, getSource, deleteSource } from '../api/content.js';
 import { Form, useNavigate } from 'react-router-dom';
 
 function ContentPhoto({ desc, date, id, path }) {
@@ -51,7 +51,7 @@ function ContentPhoto({ desc, date, id, path }) {
             } else if (newDescription.length > 1000) {
                 setInstruction('Broadcast cannot be more than 1000 characters');
             } else {
-                const res = await updateBroadcast(newDescription, id);
+                const res = await updateContent(newDescription, id);
                 setDescription(newDescription);
                 onClose();
             }   
@@ -62,7 +62,8 @@ function ContentPhoto({ desc, date, id, path }) {
     
     const processDeleteContent = async () => {
         try {
-            const res = await deleteBroadcast(id);
+            await deleteContent(id);
+            await deleteSource(path);
             setDeleted(true);
         } catch (error) {
             console.log(error);

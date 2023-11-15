@@ -14,7 +14,7 @@ export const addContent = (formData) => axios.post('http://localhost:3000/api/co
     }
 })
 
-export const getSource = (name) => axios.get('http://localhost:3000/api/content/' + name, {
+export const getSource = (name) => axios.get('http://localhost:3000/api/content/src/' + name, {
     headers: {
         Authorization: 'Bearer ' + localStorage.getItem('token'),
     },
@@ -22,10 +22,11 @@ export const getSource = (name) => axios.get('http://localhost:3000/api/content/
 
 })
 
-export const updateContent = (broadcast, id) => axios.put('http://localhost:3000/api/broadcast/' + id, {
+export const updateContent = (broadcast, id) => axios.put('http://localhost:3000/api/content/' + id, {
     'userID': localStorage.getItem('userID'),
     'description': broadcast
 })
 
-export const deleteContent = (id) => axios.delete('http://localhost:3000/api/broadcast/' + id)
+export const deleteContent = (id) => axios.delete('http://localhost:3000/api/content/' + id)
+export const deleteSource = (path) => axios.delete('http://localhost:3000/api/content/src/' + path)
 

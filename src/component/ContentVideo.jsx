@@ -23,7 +23,7 @@ import {
 import { EditIcon } from '@chakra-ui/icons';
 import Comment from './Comment.jsx';
 import { useEffect, useState } from 'react';
-import { updateContent, deleteContent, getSource } from '../api/content.js';
+import { updateContent, deleteContent, getSource, deleteSource } from '../api/content.js';
 import { Form, useNavigate } from 'react-router-dom';
 
 function ContentVideo({ desc, date, id, path }) {
@@ -63,7 +63,8 @@ function ContentVideo({ desc, date, id, path }) {
     
     const processDeleteContent = async () => {
         try {
-            const res = await deleteBroadcast(id);
+            await deleteContent(id);
+            await deleteSource(path);
             setDeleted(true);
         } catch (error) {
             console.log(error);
