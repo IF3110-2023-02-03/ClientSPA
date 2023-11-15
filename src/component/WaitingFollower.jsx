@@ -9,8 +9,10 @@ import {
     Text,
     Heading,
 } from '@chakra-ui/react';
+import { confirmFollow } from '../api/following';
 
-function Follower() {
+function Follower({username, fullname, id}) {
+
     return (
         <>
             <Card flex shadow={'2xl'} w={'30%'} mb={'3%'}>
@@ -21,10 +23,10 @@ function Follower() {
                         justifyContent={'space-around'}
                     >
                         <Box width={'95%'}>
-                            <Heading as={'h2'}>Natthan Krish</Heading>
-                            <Text>@natthankrish</Text>
+                            <Heading as={'h2'}>{fullname}</Heading>
+                            <Text>@{username}</Text>
                             <Flex m={'10px 0 5px 0'} flexDirection={'row'}>
-                                <Flex
+                                {/* <Flex
                                     flexDirection={'row'}
                                     alignItems={'center'}
                                     gap={'10px'}
@@ -41,19 +43,29 @@ function Follower() {
                                         w={'20px'}
                                     />
                                     <Text>12 Posts</Text>
-                                </Flex>
+                                </Flex> */}
                             </Flex>
                             <Divider mt={'20px'} />
                             <Flex flexDirection={'row'} gap={'5%'}>
                                 <Button
                                     text={'Delete From Followers'}
                                     w={'100%'}
+                                    onClick={() => 
+                                        confirmFollow(localStorage.getItem("userID"), id, true)
+                                            .then(res => console.log(res))
+                                            .catch(err => console.log(err))
+                                    }
                                 >
                                     Approve
                                 </Button>
                                 <Button
                                     text={'Delete From Followers'}
                                     w={'100%'}
+                                    onClick={() => 
+                                        confirmFollow(localStorage.getItem("userID"), id, false)
+                                            .then(res => console.log(res))
+                                            .catch(err => console.log(err))
+                                    }
                                 >
                                     Delete
                                 </Button>

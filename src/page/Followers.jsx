@@ -5,11 +5,13 @@ import Navbar from '../component/Navbar.jsx';
 import { Search2Icon } from '@chakra-ui/icons';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { getPendingFollowers } from '../api/following.js';
 
 function Followers() {
     const navigate = useNavigate();
 
     const [isRequestPage, setRequestPage] = useState(false);
+    const [requests, setRequests] = useState([])
 
     useEffect(() => {
         // Check if userID is not set in localStorage, then redirect to home page
@@ -17,7 +19,13 @@ function Followers() {
         if (!userID) {
             navigate('/');
         }
-    }, [navigate]);
+    }, []);
+
+    useEffect(() => {
+        if(isRequestPage){
+            getPendingFollowers(localStorage.getItem("userID")).then(res => setRequests(res.data.data)).catch(err => console.log(err))
+        }
+    }, [isRequestPage])
 
     function changeRequest() {
         if (isRequestPage) {
@@ -82,11 +90,10 @@ function Followers() {
                                 flexWrap={'wrap'}
                                 gap={'5%'}
                             >
-                                <WaitingFollower />
-                                <WaitingFollower />
-                                <WaitingFollower />
-                                <WaitingFollower />
-                                <WaitingFollower />
+                                {
+                                    requests.map(req => 
+                                        <WaitingFollower key={req.follwerID} username={req.followerUsername} fullname={req.followerName} id={req.followerID}/>)
+                                }
                             </Flex>
                         </Flex>
                     ) : (
