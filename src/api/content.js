@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-export const getContent = (username, fullname, email, password) => axios.get('http://localhost:3000/api/user', {
+export const getContent = () => axios.get('http://localhost:3000/api/content', {
     headers: {Authorization: 'Bearer ' + localStorage.getItem('token')},
     params: {
-        userID
+        'userID': localStorage.getItem('userID')
     }
 })
 
@@ -13,5 +13,3 @@ export const addContent = (username, fullname, email, password) => axios.get('ht
         userID
     }
 })
-
-export default register;

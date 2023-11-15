@@ -8,25 +8,33 @@ import {
     Button,
     Input,
     Image,
+    Text,
     Textarea,
     Flex,
     Box,
     Heading,
     Center,
+    TagLabel,
+    FormLabel,
+    useSafeLayoutEffect,
 } from '@chakra-ui/react';
 import ButtonWhite from '../component/ButtonWhite.jsx';
+import { getContent, addContent } from '../api/content.js';
 import ContentPhoto from '../component/ContentPhoto.jsx';
 import ContentVideo from '../component/ContentVideo.jsx';
 import Navbar from '../component/Navbar.jsx';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function Content() {
     const navigate = useNavigate();
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewFile, setPreviewFile] = useState(null);
     const [description, setDescription] = useState('');
     const [instruction, setInstruction] = useState('');
+    const [data, setData] = useState([]);
 
     useEffect(() => {
         // Check if userID is not set in localStorage, then redirect to home page
@@ -34,59 +42,80 @@ function Content() {
         if (!userID) {
             navigate('/');
         }
+        loadData();
     }, [navigate]);
 
-    const getContent = async () => {
+    const loadData = async () => {
         try {
-            const res = await getContent(username, password);
-            localStorage.setItem('token', res.token);
-            localStorage.setItem('userID', res.userID);
+            const res = await getContent();
+            setData(res);
+            console.log(res);
         } catch (error) {
             console.log(error);
-        }
-    };
-
-    const loadBroadcast = () => {
-        try {
-            const [data, setData] = useState([]);
-            useEffect(() => {
-                const getData = async () => {
-                    try {
-                        const res = await getBroadcast();
-                        setData(res);
-                    } catch (err) {
-                        console.error(err);
-                    }
-                };
-
-                getData();
-            }, []);
-            if (data.length != 0) {
-                return (
-                    <>
-                        {data.data.data.map((item) => {
-                            return (
-                                <BroadcastItem
-                                    key={item.objectID}
-                                    id={item.objectID}
-                                    desc={item.description}
-                                    date={item.post_date}
-                                />
-                            );
-                        })}
-                    </>
-                );
-            }
-        } catch (error) {
-            console.log(error);
-            return <></>;
         }
     };
 
     const openModal = () => {
         onOpen();
+        setSelectedFile(null);
+        setPreviewFile(null);
         setInstruction('');
         setDescription('');
+    };
+
+    const processAddContent = async () => {
+        try {
+            if (description == '') {
+                setInstruction('Type your broadcast first');
+            } else if (description.length > 1000) {
+                setInstruction('Broadcast cannot be more than 1000 characters');
+            } else {
+                await addContent(description);
+                loadData();
+                onClose();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const preview = () => {
+      if (!selectedFile) {
+        return (
+            <Image
+                src='../../assets/no-image.jpg'
+                maxHeight={'30vh'}
+                maxWidth={'100%'}
+                objectFit={'contain'}
+                id='add-photo-display'
+            /> 
+      )} else {
+        const reader = new FileReader();
+        reader.onload = () => setPreviewFile(reader.result);
+        reader.readAsDataURL(selectedFile);
+        if (selectedFile.type == 'video/mp4') {
+            return (
+                <video
+                    src={previewFile}
+                    maxheight={'30vh'}
+                    maxwidth={'100%'}
+                    objectfit={'contain'}
+                    id='add-photo-display'
+                    controls
+                /> 
+            )
+        } else {
+            return (
+                <Image
+                    src={previewFile}
+                    maxHeight={'30vh'}
+                    maxWidth={'100%'}
+                    objectFit={'contain'}
+                    id='add-photo-display'
+                />
+            )
+        }
+      }
     };
 
     return (
@@ -116,22 +145,23 @@ function Content() {
                             <ModalContent>
                                 <ModalHeader>Add New Content</ModalHeader>
                                 <ModalCloseButton />
-                                <Image
-                                    src='../../assets/home-page.png'
-                                    maxHeight={'30%'}
-                                    maxWidth={'100%'}
-                                    objectFit={'contain'}
-                                    id='add-photo-display'
-                                />
+                                {preview()}
                                 <Center mt={'4%'}>
-                                    <label htmlFor='file-input'>
-                                        <ButtonWhite text={'Choose File'} />
-                                    </label>
+                                    <FormLabel 
+                                        htmlFor='file-input'
+                                        border={'2px solid black'}
+                                        borderRadius={'15px'}
+                                        textAlign={'center'}
+                                        padding={'10px 20px'}>
+                                        Choose File
+                                    </FormLabel>
                                 </Center>
                                 <Input
                                     type='file'
                                     id='file-input'
-                                    display={'none'}
+                                    display={"none"}
+                                    accept=".jpg, .jpeg, .png, .mp4"
+                                    onChange={(e) => setSelectedFile(e.target.files[0])}
                                 />
                                 <Textarea
                                     type='description'
@@ -162,7 +192,20 @@ function Content() {
                         flexDirection={'column'}
                         id={'container'}
                     >
-                        {loadContent()}
+                        {data.length == 0 
+                            ? <></> 
+                            : <>
+                                {data.data.data.map((item) => {
+                                    return (
+                                        <BroadcastItem
+                                            key={item.objectID}
+                                            id={item.objectID}
+                                            desc={item.description}
+                                            date={item.post_date}
+                                        />
+                                    );
+                                })}
+                            </>}
                     </Flex>
                 </Box>
             </Flex>
