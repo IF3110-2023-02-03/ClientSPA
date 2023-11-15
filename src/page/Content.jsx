@@ -19,7 +19,7 @@ import ContentPhoto from '../component/ContentPhoto.jsx';
 import ContentVideo from '../component/ContentVideo.jsx';
 import Navbar from '../component/Navbar.jsx';
 import { useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
 function Content() {
     const navigate = useNavigate();
@@ -46,7 +46,7 @@ function Content() {
         }
     };
 
-    const loadBroadcast = () => {
+    const loadContent = () => {
         try {
             const [data, setData] = useState([]);
             useEffect(() => {
