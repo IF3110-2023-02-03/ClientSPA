@@ -52,32 +52,36 @@ function Account() {
         // Check if userID is not set in localStorage
         const userID = localStorage.getItem('userID');
         if (!userID) {
-          navigate('/');    // Redirect to home page
+            navigate('/'); // Redirect to home page
         } else {
-          refreshUser();    // Fetch user info
+            refreshUser(); // Fetch user info
         }
-      }, [navigate]);
+    }, [navigate]);
 
     const {
         isOpen: isOpen1,
         onOpen: onOpen1,
         onClose: onClose1,
     } = useDisclosure();
+
     const {
         isOpen: isOpen2,
         onOpen: onOpen2,
         onClose: onClose2,
     } = useDisclosure();
+
     const {
         isOpen: isOpen3,
         onOpen: onOpen3,
         onClose: onClose3,
     } = useDisclosure();
+
     const {
         isOpen: isOpen4,
         onOpen: onOpen4,
         onClose: onClose4,
     } = useDisclosure();
+
     const [user, setUser] = useState({
         username: '',
         fullname: '',
@@ -87,6 +91,30 @@ function Account() {
         objectCount: 0,
     });
 
+    useEffect(() => {
+        if (isOpen1) {
+            setInstruction('');
+        }
+    }, [isOpen1]);
+
+    useEffect(() => {
+        if (isOpen2) {
+            setInstruction('');
+        }
+    }, [isOpen2]);
+
+    useEffect(() => {
+        if (isOpen3) {
+            setInstruction('');
+        }
+    }, [isOpen3]);
+
+    useEffect(() => {
+        if (isOpen4) {
+            setInstruction('');
+        }
+    }, [isOpen4]);
+
     const [instruction, setInstruction] = useState('');
 
     const [newDescription, setNewDescription] = useState('');
@@ -95,7 +123,12 @@ function Account() {
             if (newDescription == '') {
                 setInstruction('Updated description cannot be empty');
             } else {
-                await updateUser(user.username, user.fullname, newDescription);
+                await updateUser(
+                    user.username,
+                    user.fullname,
+                    newDescription,
+                    user.profilePicture,
+                );
                 // Fetch updated user info after the change
                 await refreshUser();
                 onClose1(); // Close the modal after updating
@@ -124,35 +157,90 @@ function Account() {
         }
     };
 
+    const [usernameValid, setUsernameValid] = useState(true);
     const [newUsername, setNewUsername] = useState('');
     const handleChangeUsername = async () => {
         try {
             if (newUsername == '') {
+                setUsernameValid(false);
                 setInstruction('Updated username cannot be empty');
             } else {
-                await updateUser(newUsername, user.fullname, user.description);
-                // Fetch updated user info after the change
-                await refreshUser();
-                onClose3(); // Close the modal after updating
+                if (usernameValid) {
+                    await updateUser(
+                        newUsername,
+                        user.fullname,
+                        user.description,
+                        user.profilePicture,
+                    );
+                    // Fetch updated user info after the change
+                    await refreshUser();
+                    onClose3(); // Close the modal after updating
+                }
             }
         } catch (error) {
-            console.error('Error updating username:', error);
+            // Handle errors
+            const { data } = error.response;
+
+            if (data.message === 'Username already taken!') {
+                setInstruction('Username already exists.');
+            } else {
+                setInstruction('Error updating username.');
+            }
+        }
+    };
+
+    const handleUsernameChange = (e) => {
+        setNewUsername(e.target.value);
+
+        if (!e.target.value) {
+            setUsernameValid(false);
+            setInstruction('Updated username cannot be empty');
+        } else if (!/^\w+$/.test(e.target.value)) {
+            setUsernameValid(false);
+            setInstruction('Invalid username format.');
+        } else {
+            setUsernameValid(true);
+            setInstruction('');
         }
     };
 
     const [newName, setNewName] = useState('');
+    const [nameValid, setNameValid] = useState(true);
     const handleChangeName = async () => {
         try {
             if (newName == '') {
+                setNameValid(false);
                 setInstruction('Updated name cannot be empty');
             } else {
-                await updateUser(user.username, newName, user.description);
-                // Fetch updated user info after the change
-                await refreshUser();
-                onClose4(); // Close the modal after updating
+                if (nameValid) {
+                    await updateUser(
+                        user.username,
+                        newName,
+                        user.description,
+                        user.profilePicture,
+                    );
+                    // Fetch updated user info after the change
+                    await refreshUser();
+                    onClose4(); // Close the modal after updating
+                }
             }
         } catch (error) {
             console.error('Error updating name:', error);
+        }
+    };
+
+    const handleNameChange = (e) => {
+        setNewName(e.target.value);
+
+        if (!e.target.value) {
+            setNameValid(false);
+            setInstruction('Updated name cannot be empty');
+        } else if (!/^[a-zA-Z ]+$/.test(e.target.value)) {
+            setNameValid(false);
+            setInstruction('Invalid name format.');
+        } else {
+            setNameValid(true);
+            setInstruction('');
         }
     };
 
@@ -204,7 +292,11 @@ function Account() {
                                 justifyContent={'space-around'}
                             >
                                 <Image
-                                    src={user.profilePicture}
+                                    src={
+                                        user.profilePicture
+                                            ? user.profilePicture
+                                            : '../../assets/check.png'
+                                    }
                                     width={'50vh'}
                                     height={'50vh'}
                                     objectFit={'cover'}
@@ -249,7 +341,8 @@ function Account() {
                                                         <Text
                                                             color={'red'}
                                                             width={'90%'}
-                                                            m={'0 0 5% 20%'}
+                                                            m={'0 0 5% 5%'}
+                                                            textAlign={'center'}
                                                         >
                                                             {instruction}
                                                         </Text>
@@ -326,17 +419,15 @@ function Account() {
                                                             placeholder='New Username'
                                                             w={'90%'}
                                                             m={'5%'}
-                                                            onChange={(event) =>
-                                                                setNewUsername(
-                                                                    event.target
-                                                                        .value,
-                                                                )
+                                                            onChange={
+                                                                handleUsernameChange
                                                             }
                                                         />
                                                         <Text
                                                             color={'red'}
                                                             width={'90%'}
-                                                            m={'0 0 5% 20%'}
+                                                            m={'0 0 5% 5%'}
+                                                            textAlign={'center'}
                                                         >
                                                             {instruction}
                                                         </Text>
@@ -370,17 +461,15 @@ function Account() {
                                                             placeholder='New Name'
                                                             w={'90%'}
                                                             m={'5%'}
-                                                            onChange={(event) =>
-                                                                setNewName(
-                                                                    event.target
-                                                                        .value,
-                                                                )
+                                                            onChange={
+                                                                handleNameChange
                                                             }
                                                         />
                                                         <Text
                                                             color={'red'}
                                                             width={'90%'}
-                                                            m={'0 0 5% 20%'}
+                                                            m={'0 0 5% 5%'}
+                                                            textAlign={'center'}
                                                         >
                                                             {instruction}
                                                         </Text>
@@ -412,7 +501,9 @@ function Account() {
                                         </Text>
                                         <br></br>
                                         <Text textAlign={'center'}>
-                                            {user.description}
+                                            {user.description
+                                                ? user.description
+                                                : "You haven't added a description for your account"}
                                         </Text>
                                         <br></br>
                                         <Flex
