@@ -25,6 +25,8 @@ function Content() {
     const navigate = useNavigate();
 
     const { isOpen, onOpen, onClose } = useDisclosure();
+    const [description, setDescription] = useState('');
+    const [instruction, setInstruction] = useState('');
 
     useEffect(() => {
         // Check if userID is not set in localStorage, then redirect to home page
@@ -42,6 +44,49 @@ function Content() {
         } catch (error) {
             console.log(error);
         }
+    };
+
+    const loadBroadcast = () => {
+        try {
+            const [data, setData] = useState([]);
+            useEffect(() => {
+                const getData = async () => {
+                    try {
+                        const res = await getBroadcast();
+                        setData(res);
+                    } catch (err) {
+                        console.error(err);
+                    }
+                };
+
+                getData();
+            }, []);
+            if (data.length != 0) {
+                return (
+                    <>
+                        {data.data.data.map((item) => {
+                            return (
+                                <BroadcastItem
+                                    key={item.objectID}
+                                    id={item.objectID}
+                                    desc={item.description}
+                                    date={item.post_date}
+                                />
+                            );
+                        })}
+                    </>
+                );
+            }
+        } catch (error) {
+            console.log(error);
+            return <></>;
+        }
+    };
+
+    const openModal = () => {
+        onOpen();
+        setInstruction('');
+        setDescription('');
     };
 
     return (
@@ -64,7 +109,7 @@ function Content() {
                         <Heading>Contents</Heading>
                         <ButtonWhite
                             text={'Add New Content'}
-                            handler={onOpen}
+                            handler={openModal}
                         />
                         <Modal onClose={onClose} isOpen={isOpen} isCentered>
                             <ModalOverlay />
@@ -94,7 +139,17 @@ function Content() {
                                     placeholder='Description'
                                     w={'90%'}
                                     m={'5%'}
+                                    onChange={(e) =>
+                                        setDescription(e.target.value)
+                                    }
                                 />
+                                <Text
+                                    color={'red'}
+                                    width={'90%'}
+                                    m={'0 0 5% 5%'}
+                                >
+                                    {instruction}
+                                </Text>
                                 <Button id='submit-photo'>
                                     Upload Content
                                 </Button>
@@ -107,8 +162,7 @@ function Content() {
                         flexDirection={'column'}
                         id={'container'}
                     >
-                        <ContentPhoto />
-                        <ContentVideo />
+                        {loadContent()}
                     </Flex>
                 </Box>
             </Flex>

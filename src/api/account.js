@@ -7,9 +7,10 @@ export const userInfo = () => axios.get("http://localhost:3000/api/user/info", {
     }
 })
 
-export const updateUser = (username, fullname, description) => axios.put('http://localhost:3000/api/user', {
+export const updateUser = (username, fullname, description, pp_url) => axios.put('http://localhost:3000/api/user', {
     'userID': localStorage.getItem('userID'),
     'username': username,
     'fullname': fullname,
-    'description': description
+    'description': description,
+    'pp_url': pp_url
 })
