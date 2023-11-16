@@ -20,24 +20,19 @@ function Followers() {
         if (!userID) {
             navigate('/');
         }
+        getFollowers(localStorage.getItem("userID")).then(res => {
+            console.log(res)
+            setFollowers(res.data.data)
+        }).catch(err => console.log(err))
     }, []);
 
-    useEffect(() => {
+    const changeRequest = async () => {
         if(isRequestPage){
-            getPendingFollowers(localStorage.getItem("userID")).then(res => setRequests(res.data.data)).catch(err => console.log(err))
-        }else{
-            getFollowers(localStorage.getItem("userID")).then(res => {
-                console.log(res)
-                setFollowers(res.data.data)
-            }).catch(err => console.log(err))
-        }
-    }, [isRequestPage])
-
-    function changeRequest() {
-        if (isRequestPage) {
+            await getFollowers(localStorage.getItem("userID")).then(res => {setFollowers(res.data.data)}).catch(err => console.log(err))
             document.getElementById('see-request-btn').innerText =
                 'See Request';
         } else {
+            await getPendingFollowers(localStorage.getItem("userID")).then(res => setRequests(res.data.data)).catch(err => console.log(err))
             document.getElementById('see-request-btn').innerText =
                 'All Followers';
         }

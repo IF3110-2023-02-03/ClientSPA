@@ -314,6 +314,17 @@ function Account() {
         }
     }
 
+    const [followerCount, setFollowerCount] = useState(0);
+    const getFollowerCount = async (path) => {
+        if (path) {
+            let res = await getSource(path);
+            const reader = new FileReader();
+            reader.onload = () => setDisplayFile(reader.result);
+            reader.readAsDataURL(res.data);
+            setCurrentImage(path);
+        }
+    }
+
     return (
         <>
             <Flex justify={'center'} margin={'0 auto'}>
