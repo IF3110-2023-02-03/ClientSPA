@@ -25,7 +25,7 @@ import ContentPhoto from '../component/ContentPhoto.jsx';
 import ContentVideo from '../component/ContentVideo.jsx';
 import Navbar from '../component/Navbar.jsx';
 import { Form, useNavigate } from 'react-router-dom';
-import { useEffect, useState, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function Content() {
     const navigate = useNavigate();
