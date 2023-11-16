@@ -18,3 +18,10 @@ export const updateBroadcast = (broadcast, id) => axios.put('http://localhost:30
 })
 
 export const deleteBroadcast = (id) => axios.delete('http://localhost:3000/api/broadcast/' + id)
+
+export const getLikeCount = (id) => axios.get('http://localhost:3000/api/broadcast/like/' + id, {
+    headers: {Authorization: 'Bearer ' + localStorage.getItem('token')},
+    params: {
+        'userID': localStorage.getItem('userID')
+    }
+})
