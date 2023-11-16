@@ -97,7 +97,6 @@ function Content() {
                 id='add-photo-display'
             /> 
       )} else {
-        console.log(selectedFile);
         const reader = new FileReader();
         reader.onload = () => setPreviewFile(reader.result);
         reader.readAsDataURL(selectedFile);
@@ -204,14 +203,22 @@ function Content() {
                             ? <></> 
                             : <>
                                 {data.data.data.map((item) => {
-                                    return (
-                                        <BroadcastItem
-                                            key={item.objectID}
-                                            id={item.objectID}
-                                            desc={item.description}
-                                            date={item.post_date}
-                                        />
-                                    );
+                                    if (item.type == 'Photo' ) {
+                                        return <ContentPhoto 
+                                                    key={item.objectID}
+                                                    id={item.objectID}
+                                                    desc={item.description}
+                                                    date={item.post_date}
+                                                    path={item.url}
+                                                />
+                                    }
+                                    return <ContentVideo
+                                        key={item.objectID}
+                                        id={item.objectID}
+                                        desc={item.description}
+                                        date={item.post_date}
+                                        path={item.url}
+                                    />
                                 })}
                             </>}
                     </Flex>

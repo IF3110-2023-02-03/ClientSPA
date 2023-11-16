@@ -5,6 +5,7 @@ import {
     CardBody,
     Center,
     Flex,
+    FormLabel,
     Heading,
     Image,
     Input,
@@ -24,11 +25,12 @@ import {
 import Navbar from '../component/Navbar.jsx';
 import ButtonWhite from '../component/ButtonWhite.jsx';
 import { useEffect, useState } from 'react';
-import { userInfo, updateUser } from '../api/account.js';
+import { userInfo, updateUser, changeProfile, getSource } from '../api/account.js';
 import { useNavigate } from 'react-router-dom';
 
 function Account() {
     const navigate = useNavigate();
+    const [currentImage, setCurrentImage] = useState('');
 
     function refreshUser() {
         userInfo()
@@ -42,6 +44,7 @@ function Account() {
                     broadcastCount: data.broadcastCount,
                     objectCount: data.objectCount,
                 });
+                displayImage(data.user.pp_url);
             })
             .catch((error) => {
                 console.error('Error fetching user info:', error);
@@ -253,6 +256,75 @@ function Account() {
         }
     };
 
+    const [selectedFile, setSelectedFile] = useState(null);
+    const [previewFile, setPreviewFile] = useState(null);
+
+    const preview = () => {
+        if (!selectedFile) {
+          return (
+              <Image
+                  src='../../assets/no-image.jpg'
+                  maxHeight={'30vh'}
+                  maxWidth={'100%'}
+                  objectFit={'contain'}
+                  id='add-photo-display'
+              /> 
+        )} else {
+          const reader = new FileReader();
+          reader.onload = () => setPreviewFile(reader.result);
+          reader.readAsDataURL(selectedFile);
+            return (
+                <Image
+                    src={previewFile}
+                    maxHeight={'30vh'}
+                    maxWidth={'100%'}
+                    objectFit={'contain'}
+                    id='add-photo-display'
+                />
+            )
+        }
+      };
+
+      const processChangeProfile = async () => {
+        try {
+            if (!selectedFile) {
+                setInstruction('No File Chosen');
+            } else {
+                const formData = new FormData();
+                formData.append("userID", localStorage.getItem('userID'));
+                formData.append("file", selectedFile);
+                formData.append("previousPath", currentImage)
+                let res = await changeProfile(formData);
+                displayImage(res.data.newPath);
+                onClose2();
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const [displayFile, setDisplayFile] = useState(null);
+    const displayImage = async (path) => {
+        if (path) {
+            let res = await getSource(path);
+            const reader = new FileReader();
+            reader.onload = () => setDisplayFile(reader.result);
+            reader.readAsDataURL(res.data);
+            setCurrentImage(path);
+        }
+    }
+
+    const [followerCount, setFollowerCount] = useState(0);
+    const getFollowerCount = async (path) => {
+        if (path) {
+            let res = await getSource(path);
+            const reader = new FileReader();
+            reader.onload = () => setDisplayFile(reader.result);
+            reader.readAsDataURL(res.data);
+            setCurrentImage(path);
+        }
+    }
+
     return (
         <>
             <Flex justify={'center'} margin={'0 auto'}>
@@ -292,11 +364,7 @@ function Account() {
                                 justifyContent={'space-around'}
                             >
                                 <Image
-                                    src={
-                                        user.profilePicture
-                                            ? user.profilePicture
-                                            : '../../assets/check.png'
-                                    }
+                                    src={displayFile}
                                     width={'50vh'}
                                     height={'50vh'}
                                     objectFit={'cover'}
@@ -371,30 +439,32 @@ function Account() {
                                                             Picture
                                                         </ModalHeader>
                                                         <ModalCloseButton />
-                                                        <Image
-                                                            src='../../assets/home-page.png'
-                                                            maxHeight={'30%'}
-                                                            maxWidth={'100%'}
-                                                            objectFit={
-                                                                'contain'
-                                                            }
-                                                            id='add-photo-display'
-                                                        />
-                                                        <Center m={'4% 0'}>
-                                                            <label htmlFor='file-input'>
-                                                                <ButtonWhite
-                                                                    text={
-                                                                        'Choose File'
-                                                                    }
-                                                                />
-                                                            </label>
+                                                        {preview()}
+                                                        <Center mt={'4%'}>
+                                                            <FormLabel 
+                                                                htmlFor='file-input'
+                                                                border={'2px solid black'}
+                                                                borderRadius={'15px'}
+                                                                textAlign={'center'}
+                                                                padding={'10px 20px'}>
+                                                                Choose File
+                                                            </FormLabel>
                                                         </Center>
                                                         <Input
                                                             type='file'
                                                             id='file-input'
-                                                            display={'none'}
+                                                            display={"none"}
+                                                            accept=".jpg, .jpeg, .png"
+                                                            onChange={(e) => setSelectedFile(e.target.files[0])}
                                                         />
-                                                        <Button id='submit-photo'>
+                                                        <Center
+                                                            color={'red'}
+                                                            width={'90%'}
+                                                            m={'0 0 5% 5%'}
+                                                        >
+                                                            {instruction}
+                                                        </Center>
+                                                        <Button onClick={processChangeProfile}>
                                                             Update
                                                         </Button>
                                                     </ModalContent>
