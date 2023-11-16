@@ -25,7 +25,7 @@ import {
 import Navbar from '../component/Navbar.jsx';
 import ButtonWhite from '../component/ButtonWhite.jsx';
 import { useEffect, useState } from 'react';
-import { userInfo, updateUser, changeProfile, getSource } from '../api/account.js';
+import { userInfo, updateUser, changeProfile, getSource, getFollowersCount } from '../api/account.js';
 import { useNavigate } from 'react-router-dom';
 
 function Account() {
@@ -58,6 +58,7 @@ function Account() {
             navigate('/'); // Redirect to home page
         } else {
             refreshUser(); // Fetch user info
+            getFollowerCount();
         }
     }, [navigate]);
 
@@ -315,14 +316,10 @@ function Account() {
     }
 
     const [followerCount, setFollowerCount] = useState(0);
-    const getFollowerCount = async (path) => {
-        if (path) {
-            let res = await getSource(path);
-            const reader = new FileReader();
-            reader.onload = () => setDisplayFile(reader.result);
-            reader.readAsDataURL(res.data);
-            setCurrentImage(path);
-        }
+    const getFollowerCount = async () => {
+        getFollowersCount()
+            .then(res => setFollowerCount(res.data.count))
+            .catch(err => console.log(err))
     }
 
     return (
@@ -590,7 +587,7 @@ function Account() {
                                                     h={'20px'}
                                                     w={'20px'}
                                                 />
-                                                <Text>190 Followers</Text>
+                                                <Text>{followerCount} Followers</Text>
                                                 <Image
                                                     src='../../assets/image.png'
                                                     h={'20px'}
