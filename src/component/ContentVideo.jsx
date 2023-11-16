@@ -23,7 +23,7 @@ import {
 import { EditIcon } from '@chakra-ui/icons';
 import Comment from './Comment.jsx';
 import { useEffect, useState } from 'react';
-import { updateContent, deleteContent, getSource, deleteSource, getLikeCount } from '../api/content.js';
+import { updateContent, deleteContent, getSource, deleteSource, getLikeCount, getComment } from '../api/content.js';
 import { Form, useNavigate } from 'react-router-dom';
 
 function ContentVideo({ desc, date, id, path }) {
@@ -36,6 +36,7 @@ function ContentVideo({ desc, date, id, path }) {
     const [instruction, setInstruction] = useState('');
     const [previewFile, setPreviewFile] = useState(null);
     const [likeCount, setLikeCount] = useState(0);
+    const [comment, setComment] = useState([]);
 
     useEffect(() => {
         // Check if userID is not set in localStorage, then redirect to home page
@@ -45,6 +46,7 @@ function ContentVideo({ desc, date, id, path }) {
         }
         processPreview();
         processLikeCount();
+        loadComment();
     }, [navigate]);
 
     const processUpdateDescription = async () => {
@@ -96,6 +98,13 @@ function ContentVideo({ desc, date, id, path }) {
         let res = await getLikeCount(id)
         setLikeCount(res.data.data.count)
     }
+
+    const loadComment = async () => {
+        let res = await getComment(id)
+        console.log(res.data.data);
+        setComment(res.data.data);
+    }
+
 
     if (deleted) {
         return <></>
@@ -195,9 +204,21 @@ function ContentVideo({ desc, date, id, path }) {
                                     overflowY={'auto'}
                                     m={'5px 0 30px 0'}
                                 >
-                                    <Comment />
-                                    <Comment />
-                                    <Comment />
+                                    {comment.length == 0 
+                                            ? <>No Comments</> 
+                                            : <>
+                                                {comment.map((item) => {
+                                                    return (
+                                                        <Comment
+                                                            key={item.commentID}
+                                                            type={item.type}
+                                                            id={item.commentID}
+                                                            user={item.user}
+                                                            message={item.message}
+                                                        />
+                                                    );
+                                                })}
+                                            </>}
                                 </Box>
                             </Box>
                         </Flex>

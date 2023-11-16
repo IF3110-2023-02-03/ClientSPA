@@ -24,7 +24,7 @@ import {
 import { EditIcon } from '@chakra-ui/icons';
 import Comment from './Comment.jsx';
 import { useEffect, useState } from 'react';
-import { updateBroadcast, deleteBroadcast, getLikeCount } from '../api/broadcast.js';
+import { updateBroadcast, deleteBroadcast, getLikeCount, getComment } from '../api/broadcast.js';
 import { useNavigate } from 'react-router-dom';
 
 function BroadcastItem({desc, date, id}) {
@@ -36,6 +36,7 @@ function BroadcastItem({desc, date, id}) {
     const [deleted, setDeleted] = useState(false);
     const [instruction, setInstruction] = useState('');
     const [likeCount, setLikeCount] = useState(0);
+    const [comment, setComment] = useState([]);
 
     useEffect(() => {
         // Check if userID is not set in localStorage, then redirect to home page
@@ -44,6 +45,7 @@ function BroadcastItem({desc, date, id}) {
             navigate('/');
         }
         processLikeCount();
+        loadComment();
     }, [navigate]);
 
     const processUpdateDescription = async () => {
@@ -83,8 +85,13 @@ function BroadcastItem({desc, date, id}) {
 
     const processLikeCount = async () => {
         let res = await getLikeCount(id)
-        console.log(res);
         setLikeCount(res.data.data.count)
+    }
+
+    const loadComment = async () => {
+        let res = await getComment(id)
+        console.log(res.data.data);
+        setComment(res.data.data);
     }
 
     if (deleted) {
@@ -178,10 +185,21 @@ function BroadcastItem({desc, date, id}) {
                                         overflowY={'auto'}
                                         m={'5px 0 30px 0'}
                                     >
-                                        <Comment />
-                                        <Comment />
-                                        <Comment />
-                                        <Comment />
+                                        {comment.length == 0 
+                                            ? <>No Comments</> 
+                                            : <>
+                                                {comment.map((item) => {
+                                                    return (
+                                                        <Comment
+                                                            key={item.commentID}
+                                                            type={item.type}
+                                                            id={item.commentID}
+                                                            user={item.user}
+                                                            message={item.message}
+                                                        />
+                                                    );
+                                                })}
+                                            </>}
                                     </Box>
                                 </CardFooter>
                             </Box>
