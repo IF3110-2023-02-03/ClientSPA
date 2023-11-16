@@ -22,7 +22,7 @@ import {
 import { EditIcon } from '@chakra-ui/icons';
 import Comment from './Comment.jsx';
 import { useEffect, useState } from 'react';
-import { updateContent, deleteContent, getSource, deleteSource } from '../api/content.js';
+import { updateContent, deleteContent, getSource, deleteSource, getLikeCount } from '../api/content.js';
 import { Form, useNavigate } from 'react-router-dom';
 
 function ContentPhoto({ desc, date, id, path }) {
@@ -34,6 +34,7 @@ function ContentPhoto({ desc, date, id, path }) {
     const [deleted, setDeleted] = useState(false);
     const [instruction, setInstruction] = useState('');
     const [previewFile, setPreviewFile] = useState(null);
+    const [likeCount, setLikeCount] = useState(0);
 
     useEffect(() => {
         // Check if userID is not set in localStorage, then redirect to home page
@@ -42,6 +43,7 @@ function ContentPhoto({ desc, date, id, path }) {
             navigate('/');
         }
         processPreview();
+        processLikeCount();
     }, [navigate]);
 
     const processUpdateDescription = async () => {
@@ -82,11 +84,14 @@ function ContentPhoto({ desc, date, id, path }) {
 
     const processPreview = async () => {
         let res = await getSource(path);
-        console.log(res);
-        console.log(res.data);
         const reader = new FileReader();
         reader.onload = () => setPreviewFile(reader.result);
         reader.readAsDataURL(res.data);
+    }
+
+    const processLikeCount = async () => {
+        let res = await getLikeCount(id)
+        setLikeCount(res.data.data.count)
     }
 
     if (deleted) {
@@ -167,7 +172,7 @@ function ContentPhoto({ desc, date, id, path }) {
                                             h={'20px'}
                                             w={'20px'}
                                         />
-                                        <Text>Likes</Text>
+                                        <Text> {likeCount} Likes</Text>
                                         <Image
                                             src='../../assets/date.png'
                                             h={'20px'}
