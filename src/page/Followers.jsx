@@ -20,7 +20,7 @@ function Followers() {
         if (!userID) {
             navigate('/');
         }
-        getFollowers(localStorage.getItem("userID")).then(res => {
+        getFollowers(localStorage.getItem("userID"), "").then(res => {
             console.log(res)
             setFollowers(res.data.data)
         }).catch(err => console.log(err))
@@ -37,6 +37,13 @@ function Followers() {
                 'All Followers';
         }
         setRequestPage(!isRequestPage);
+    }
+
+    const handleChange = async (e) => {
+        getFollowers(localStorage.getItem("userID"), e.target.value).then(res => {
+            console.log(res)
+            setFollowers(res.data.data)
+        }).catch(err => console.log(err))
     }
 
     return (
@@ -70,7 +77,7 @@ function Followers() {
                                 See Request
                             </Button>
                             <Search2Icon boxSize={7} />
-                            <Input placeholder='Search ' size='lg' />
+                            <Input placeholder='Search ' size='lg' onChange={handleChange} />
                         </Flex>
                     </Flex>
 
