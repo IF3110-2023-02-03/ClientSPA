@@ -23,9 +23,8 @@ import {
     useDisclosure,
 } from '@chakra-ui/react';
 import Navbar from '../component/Navbar.jsx';
-import ButtonWhite from '../component/ButtonWhite.jsx';
 import { useEffect, useState } from 'react';
-import { userInfo, updateUser, changeProfile, getSource, getFollowersCount } from '../api/account.js';
+import { userInfo, updateUser, changeProfile, getSource, updateUsernameSOAP, updateFullnameSOAP, getFollowersCount } from '../api/account.js';
 import { useNavigate } from 'react-router-dom';
 
 function Account() {
@@ -142,25 +141,6 @@ function Account() {
         }
     };
 
-    const handleUploadProfilePicture = async (newProfilePicture) => {
-        try {
-            // Perform the logic for updating the profile picture here
-
-            await updateUser(
-                user.username,
-                user.fullname,
-                user.description,
-                newProfilePicture,
-            );
-            // Fetch updated user info after the change
-            const updatedUserInfo = await userInfo();
-            setUser(updatedUserInfo.data);
-            onClose2(); // Close the modal after updating
-        } catch (error) {
-            console.error('Error updating profile picture:', error);
-        }
-    };
-
     const [usernameValid, setUsernameValid] = useState(true);
     const [newUsername, setNewUsername] = useState('');
     const handleChangeUsername = async () => {
@@ -176,6 +156,7 @@ function Account() {
                         user.description,
                         user.profilePicture,
                     );
+                    await updateUsernameSOAP(user.username, newUsername);
                     // Fetch updated user info after the change
                     await refreshUser();
                     onClose3(); // Close the modal after updating
@@ -223,6 +204,7 @@ function Account() {
                         user.description,
                         user.profilePicture,
                     );
+                    await updateFullnameSOAP(user.fullname, newName);
                     // Fetch updated user info after the change
                     await refreshUser();
                     onClose4(); // Close the modal after updating

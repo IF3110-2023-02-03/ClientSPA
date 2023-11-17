@@ -36,3 +36,13 @@ export const getSource = (name) => axios.get('http://localhost:3000/api/user/pro
     responseType: "blob"
 
 })
+
+export const updateUsernameSOAP = (oldUsername, newUsername) => axios.put('http://localhost:3000/api/update-username', {
+    'oldUsername': oldUsername,
+    'newUsername': newUsername
+})
+
+export const updateFullnameSOAP = (oldFullname, newFullname) => axios.put('http://localhost:3000/api/update-fullname', {
+    'oldFullname': oldFullname,
+    'newFullname': newFullname
+})
