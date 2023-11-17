@@ -1,5 +1,6 @@
 services:
     client:
+        image: spaces:latest
         build: ./
         container_name: spaces-clientspa
         ports:
