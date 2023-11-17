@@ -18,6 +18,14 @@ import login from '../api/login.js';
 function Login() {
     const navigate = useNavigate();
 
+    useEffect(() => {
+        // Check if userID is set in localStorage
+        const userID = localStorage.getItem('userID');
+        if (userID) {
+            navigate('/'); // Redirect to home page
+        }
+    }, [navigate]);
+
     const [show, setShow] = useState(false);
     const handleClick = () => setShow(!show);
 
