@@ -46,15 +46,16 @@ function Followers() {
                 <Box
                     w={'80%'}
                     h={'100%'}
-                    mt={'8%'}
+                    mt={{ base:'30%', sm:'20%', lg: '8%' }}
                     justify={'center'}
                     flexDirection={'column'}
                 >
                     <Flex
-                        flexDirection={'row'}
+                        flexDirection={{ base:'column', lg:'row'}}
                         justify={'space-between'}
-                        align={'center'}
+                        align={{ base:'left', lg:'center'}}
                         mb={'3%'}
+                        gap={{ base:'15px', sm:'30px', lg:'0'}}
                     >
                         <Heading>Followers</Heading>
                         <Flex
@@ -85,11 +86,12 @@ function Followers() {
                                 <Heading>Request</Heading>
                             </Center>
                             <Flex
-                                justify={'left'}
                                 align={'center'}
                                 flexDirection={'row'}
                                 flexWrap={'wrap'}
                                 gap={'5%'}
+                                width={'100%'}
+                                justify={{ base:'center', sm:'left'}}
                             >
                                 {
                                     requests.map(req => 
@@ -99,7 +101,7 @@ function Followers() {
                         </Flex>
                     ) : (
                         <Flex
-                            justify={'left'}
+                            justify={{ base:'center', sm:'left'}}
                             align={'center'}
                             flexDirection={'row'}
                             flexWrap={'wrap'}

@@ -332,7 +332,7 @@ function Account() {
                 <Box
                     w={'80%'}
                     h={'100%'}
-                    mt={'8%'}
+                    mt={{ base:'30%', sm:'20%', lg: '8%' }}
                     justify={'center'}
                     flexDirection={'column'}
                 >
@@ -342,7 +342,7 @@ function Account() {
                         align={'center'}
                         mb={'3%'}
                     >
-                        <Heading>Account</Heading>
+                        <Heading fontSize={{ base:'25px', sm: '30px' }}>Account</Heading>
                         <Flex
                             flexDirection={'row'}
                             gap={'20px'}
@@ -360,17 +360,19 @@ function Account() {
                     <Card flex shadow={'2xl'} w={'100%'} mb={'3%'}>
                         <CardBody padding={'3% 1%'}>
                             <Flex
-                                flexDirection={'row'}
+                                flexDirection={{ base:'column', xl: 'row'}}
                                 justifyContent={'space-around'}
                             >
                                 <Image
                                     src={displayFile}
-                                    width={'50vh'}
-                                    height={'50vh'}
+                                    width={{ base:'20vh', md:'30vh', lg: '40vh', xl: '50vh'}}
+                                    height={{ base:'20vh', md:'30vh', lg: '40vh', xl: '50vh'}}
                                     objectFit={'cover'}
+                                    alignSelf={'center'}
+                                    mb={{ base: '20px', xl:'0' }}
                                 />
-                                <Box width={'45%'}>
-                                    <Flex justifyContent={'right'} mb={'20px'}>
+                                <Box width={{ base:'100%', xl: '45%'}}>
+                                    <Flex justifyContent={{ base:'center', xl: 'right'}} mb={'20px'}>
                                         <Popover>
                                             <PopoverTrigger>
                                                 <Button>Manage Account</Button>
@@ -581,34 +583,49 @@ function Account() {
                                             flexDirection={'row'}
                                         >
                                             <Flex
-                                                flexDirection={'row'}
+                                                flexDirection={{base:'column', md:'row' }}
                                                 alignItems={'center'}
                                                 gap={'20px'}
                                             >
-                                                <Image
-                                                    src='../../assets/check.png'
-                                                    h={'20px'}
-                                                    w={'20px'}
-                                                />
-                                                <Text>190 Followers</Text>
-                                                <Image
-                                                    src='../../assets/image.png'
-                                                    h={'20px'}
-                                                    w={'20px'}
-                                                />
-                                                <Text>
-                                                    {user.objectCount} Exclusive
-                                                    Content
-                                                </Text>
-                                                <Image
-                                                    src='../../assets/signal.png'
-                                                    h={'20px'}
-                                                    w={'20px'}
-                                                />
-                                                <Text>
-                                                    {user.broadcastCount}{' '}
-                                                    Broadcast
-                                                </Text>
+                                                <Flex
+                                                    flexDirection={'row'}
+                                                    alignItems={'center'}
+                                                    gap={'20px'}>
+                                                        <Image
+                                                            src='../../assets/check.png'
+                                                            h={'20px'}
+                                                            w={'20px'}
+                                                        />
+                                                        <Text>190 Followers</Text>
+                                                </Flex>
+                                                <Flex
+                                                    flexDirection={'row'}
+                                                    alignItems={'center'}
+                                                    gap={'20px'}>
+                                                        <Image
+                                                            src='../../assets/image.png'
+                                                            h={'20px'}
+                                                            w={'20px'}
+                                                        />
+                                                        <Text>
+                                                            {user.objectCount} Exclusive
+                                                            Content
+                                                        </Text>
+                                                </Flex>
+                                                <Flex
+                                                    flexDirection={'row'}
+                                                    alignItems={'center'}
+                                                    gap={'20px'}>
+                                                        <Image
+                                                            src='../../assets/signal.png'
+                                                            h={'20px'}
+                                                            w={'20px'}
+                                                        />
+                                                        <Text>
+                                                            {user.broadcastCount}{' '}
+                                                            Broadcast
+                                                        </Text>
+                                                </Flex>
                                             </Flex>
                                         </Flex>
                                     </Flex>

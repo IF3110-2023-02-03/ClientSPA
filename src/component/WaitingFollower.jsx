@@ -34,7 +34,7 @@ function Follower({username, fullname, id}) {
     } else {
         return (
             <>
-                <Card flex shadow={'2xl'} w={'30%'} mb={'3%'}>
+                <Card flex shadow={'2xl'} w={{ base:'80%', sm:'45%', md: '30%'}} mb={'3%'}>
                     <CardBody>
                         <Flex
                             flexDirection={'row'}

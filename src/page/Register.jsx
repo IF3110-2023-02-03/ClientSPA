@@ -227,9 +227,9 @@ function Register() {
                 backgroundSize={'cover'}
             >
                 <Card
-                    width={'24vw'}
+                    width={{ base:'90vw', sm: '60vw',  xl:'24vw' }}
                     shadow={'2xl'}
-                    padding={'2%'}
+                    padding={{ base:'5%',  lg:'2%' }}
                     borderRadius={'20px'}
                 >
                     <CardHeader>

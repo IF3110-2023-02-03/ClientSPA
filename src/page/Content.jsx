@@ -132,7 +132,7 @@ function Content() {
                 <Box
                     w={'80%'}
                     h={'100%'}
-                    mt={'8%'}
+                    mt={{ base:'30%', sm:'20%', lg: '8%' }}
                     justify={'center'}
                     flexDirection={'column'}
                 >
@@ -142,10 +142,11 @@ function Content() {
                         align={'center'}
                         mb={'3%'}
                     >
-                        <Heading>Contents</Heading>
+                        <Heading fontSize={{ base:'25px', sm: '30px' }}>Contents</Heading>
                         <ButtonWhite
                             text={'Add New Content'}
                             handler={openModal}
+                            fontSize={{ base:'15px', sm: '20px' }}
                         />
                         <Modal onClose={onClose} isOpen={isOpen} isCentered>
                             <ModalOverlay />

@@ -107,20 +107,20 @@ function ContentPhoto({ desc, date, id, path }) {
     } else {
         return (
             <>
-                <Card flex shadow={'2xl'} w={'80%'} mb={'3%'}>
+                <Card flex shadow={'2xl'} w={{ base:'100%', md: '80%' }} mb={'3%'}>
                     <CardBody>
                         <Flex
-                            flexDirection={'row'}
+                            flexDirection={{ base:'column', md: 'row' }}
                             gap={'5%'}
                             justifyContent={'space-around'}
                         >
                             <Image
                                 src={previewFile}
-                                width={'45%'}
+                                width={{ base:'100%', md: '45%' }}
                                 maxHeight={'70vh'}
                                 objectFit={'contain'}
                             />
-                            <Box width={'45%'}>
+                            <Box width={{ base:'100%', md: '45%' }}>
                                 <Flex justifyContent={'right'} mb={'20px'}>
                                     <Popover>
                                         <PopoverTrigger>
@@ -171,22 +171,32 @@ function ContentPhoto({ desc, date, id, path }) {
                                 <NewlineText text={description} />
                                 <Flex m={'10px 0 5px 0'} flexDirection={'row'}>
                                     <Flex
-                                        flexDirection={'row'}
-                                        alignItems={'center'}
-                                        gap={'20px'}
-                                    >
-                                        <Image
-                                            src='../../assets/heart.png'
-                                            h={'20px'}
-                                            w={'20px'}
-                                        />
-                                        <Text> {likeCount} Likes</Text>
-                                        <Image
-                                            src='../../assets/date.png'
-                                            h={'20px'}
-                                            w={'20px'}
-                                        />
-                                        <Text>{date}</Text>
+                                        flexDirection={{ base:'column', md: 'row' }}
+                                        gap={{ base:'10px', md: '20px' }}
+                                    >   
+                                        <Flex
+                                            flexDirection={'row'}
+                                            alignItems={'center'}
+                                            gap={'20px'}>
+                                            <Image
+                                                src='../../assets/heart.png'
+                                                h={'20px'}
+                                                w={'20px'}
+                                            />
+                                            <Text> {likeCount} Likes</Text>
+
+                                        </Flex>
+                                        <Flex 
+                                            flexDirection={'row'}
+                                            alignItems={'center'}
+                                            gap={'20px'}>
+                                            <Image
+                                                src='../../assets/date.png'
+                                                h={'20px'}
+                                                w={'20px'}
+                                            />
+                                            <Text>{date}</Text>
+                                        </Flex> 
                                     </Flex>
                                 </Flex>
                                 <Text as={'b'} fontSize={'24px'}>

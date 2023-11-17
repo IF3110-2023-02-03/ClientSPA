@@ -12,7 +12,7 @@ function Navbar() {
             <>
                 <Flex     
                     width= {'100%'}
-                    mt= {'2%'}
+                    mt= {{ base:'5%', lg: '2%' }}
                     position= {'absolute'}
                     justifyContent= {'center'}
                     zIndex={'1'}>
@@ -25,7 +25,7 @@ function Navbar() {
                         flexDirection= {'row'}
                         alignItems= {'center'}
                         justifyContent= {'center'}
-                        gap= {'10%'}>
+                        gap= {{ base:'20px', md: '10%' }}>
                         <NavbarItem path='/content' srcimg='../../assets/image.png' alt='Content' desc='Content'/>
                         <NavbarItem path='/broadcast' srcimg='../../assets/signal.png' alt='Broadcast' desc='Broadcast'/>
                         <NavbarItem path='/followers' srcimg='../../assets/check.png' alt='Followers' desc='Followers'/>
@@ -89,6 +89,7 @@ function NavbarItem({path, srcimg, alt, desc}) {
             <Text 
                 textDecoration= {'none'}
                 fontSize= {'16px'}
+                display={{ base:'none', md: 'block' }}
                 _hover= {{
                     textDecoration: 'underline',
                     fontSize: '20px',

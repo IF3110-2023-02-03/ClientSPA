@@ -23,8 +23,8 @@ function Home() {
                     <Heading  
                         margin= {0}
                         padding= {0}
-                        maxWidth={'45vw'}
-                        fontSize={'60px'}
+                        maxWidth={{ base:'90vw', md: '60vw', xl: '45vw' }}
+                        fontSize={{ base:'30px', md: '45px', xl: '60px' }}
                         fontWeight={'bold'}
                         textAlign={'center'}>
                             Share Your Spaces Exclusively to Your Only Fans

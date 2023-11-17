@@ -74,7 +74,7 @@ function Broadcast() {
                 <Box
                     w={'80%'}
                     h={'100%'}
-                    mt={'8%'}
+                    mt={{ base:'30%', sm:'20%', lg: '8%' }}
                     justify={'center'}
                     flexDirection={'column'}
                 >
@@ -84,10 +84,11 @@ function Broadcast() {
                         align={'center'}
                         mb={'3%'}
                     >
-                        <Heading>Broadcasts</Heading>
+                        <Heading fontSize={{ base:'25px', sm: '30px' }}>Broadcasts</Heading>
                         <ButtonWhite
                             text={'Add New Broadcast'}
                             handler={openModal}
+                            fontSize={{ base:'15px', sm: '20px' }}
                         />
                         <Modal
                             onClose={onClose}
